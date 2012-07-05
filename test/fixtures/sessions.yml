@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  last_see_at: 2012-07-04 15:58:22
+  name: MyString
+  email: MyString
+
+two:
+  last_see_at: 2012-07-04 15:58:22
+  name: MyString
+  email: MyString

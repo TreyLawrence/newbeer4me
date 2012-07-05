@@ -1,0 +1,23 @@
+<h1>Search </h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for :search do |f| %>
+
+      <%= f.text_field :beers %>
+
+      <%= f.submit "Search", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>
+
+<p>
+Input beers: 
+<%= @input_beers %>
+<br>
+Spell checked:
+<%= @spell_checked %>
+<br>
+Results: 
+<%= @results %>
+</p>
