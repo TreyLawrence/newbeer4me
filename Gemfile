@@ -5,7 +5,6 @@ gem 'bootstrap-sass', '2.0.0'
 gem 'bcrypt-ruby', '3.0.1'
 gem 'nokogiri', '1.5.5'
 gem 'mechanize', '2.5.1'
-gem 'open-uri'
 
 group :production do
   gem 'pg', '0.12.2'
