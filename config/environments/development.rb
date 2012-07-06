@@ -1,4 +1,8 @@
 Newbeer4me::Application.configure do
+  Pusher.app_id = '23436'
+  Pusher.key    = 'b435db47fbb3781756ef'
+  Pusher.secret = '196072ab21a592a99cc0'
+  
   # Settings specified here will take precedence over those in config/application.rb
 
   # In the development environment your application's code is reloaded on

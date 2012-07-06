@@ -1,5 +1,5 @@
-<% if !@user_signed_in %>
+<% if !@user_cookie_present %>
   <%= render "sign_in" %>
 <% else %>
   <%= render "beer_list" %>
-<% end%>
+<% end %>
