@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>New Beer!</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
   <%= render 'layouts/shim' %>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+  <script src="http://api.jquery.com/scripts/events.js"></script>
+  <script src="http://js.pusher.com/1.11/pusher.min.js" type="text/javascript"></script>
 </head>
 <body>
-
-<%= yield %>
-<%= debug(params) if Rails.env.development? %>
+  <div class="container">
+    <%= yield %>
+		<%= render 'layouts/debug' if Rails.env.development? %>
+		<%= debug(params) if Rails.env.development? %>
+  </div>
 </body>
 </html>
