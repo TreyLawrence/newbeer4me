@@ -2,8 +2,6 @@ class BeersController < ApplicationController
   before_filter :get_session, only: [:index, :search]
   
   def index
-    @debug_string << "Visiting index, creating new mechanize object\n"
-    
     #If there is no cookie present, and the user submitted a form with username and password
     if !@user_cookie_present && params[:untappd_info]
       @debug_string << "Sign in form completed\n"
@@ -61,6 +59,7 @@ class BeersController < ApplicationController
       @debug_string = "" if @debug_string.nil?
       
       #Check for session cookie
+      @debug_string = "" if @debug_string.nil?
       if session[:name].blank? || session[:password].blank?
         @debug_string << "Cookie doesn't exist\n"
         @user_cookie_present = false
