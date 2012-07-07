@@ -1,46 +1,45 @@
 class Beer
   include ActiveModel::Validations
-  attr_accessor :name, :spelling_correction, :check_in, :errors
+  attr_accessor :name, :result
   validates :name, presence: true
   
   def initialize beer_name, mechanize_object
     @errors = ""
     @browser = mechanize_object
     @name = beer_name
+    @result = {}
   end
   
   def spell_check?
-    doc = Nokogiri::HTML(@browser.get("http://www.google.com/search?q=#{@name}").body)
+    doc = Nokogiri::HTML(@browser.get("http://www.google.com/search?q=#{@name + ' beer'}").body)
     correction_link = doc.css('a').select { |link| link['href'].include? "spell=1" }.first
-    if !correction_link.nil?
-      @spelling_correction = spelling_correction.text
-      true
-    else
-      @spelling_correction = @name
+    if correction_link.nil?
       false
+    else
+      result.merge!({spell_check: correction_link.text.split[0..-2].join(' ')})
+      true
     end
   end
   
   def search_untappd
-    page = @browser.get("http://untappd.com/search?q=#{@spelling_correction}")
+    query = (result[:spell_check]) ? result[:spell_check] : @name
+    page = @browser.get("http://untappd.com/search?q=#{query}")
     
-    if page.uri.path.include? "login"
-      @errors << "User not signed in\n"
-      false
-    else
+    if page.links.select { |link| link.uri.to_s[/login/]}.empty?
       beer_links = page.links.select { |link| link.uri.to_s[/beer\/\d+/] }
       link = beer_links[0]
       if link.nil?
-        @errors << "Untappd search has no results\n"
-        false
+        result.merge!({error: "No search results"})
       else
         if Nokogiri::HTML(link.click.body).css('.drank.tip').to_s.empty?
-          @check_in = "You have checked into #{link.to_s} before.\n"
+          result.merge!({check_in: "You have not had #{link.text} yet"})
         else
-          @check_in = "You have not checked into #{link.to_s} before.\n"
+          result.merge!({check_in: "You have had  #{link.text} already"})
         end
-        true
       end
+      true
+    else
+      false
     end
   end
 end

@@ -1,3 +1,6 @@
-<div class="beer">
-  <span class="beer-search"><%= beer %></span>
-</div>
+<li class="beers" >
+  <%= beer.name %>
+  <% beer.result.each do |key, result| %>
+    <%= content_tag(:span, result)%>
+  <% end %>
+</li>

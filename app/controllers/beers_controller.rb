@@ -33,23 +33,17 @@ class BeersController < ApplicationController
     if @user_cookie_present && params[:search]
       @debug_string << "Searching for #{params[:search]}\n"
       beer = Beer.new(params[:search].chomp.strip, @browser)
-      if beer.spell_check?
-        render :text => "Spell Check" #beer.spelling_correction
-      elsif beer.search_untappd
-        render :text => "Check in"#beer.checked_in
-      elsif beer.errors.include? "User not signed in"
-        sing_in_to_untappd
-        if beer.search_untappd
-          render :text => "Check in" #beer.checked_in
-        else
-          render text: "Error" # beer.error
+      beer.spell_check?
+      if !beer.search_untappd
+        sign_in_to_untappd
+        if !beer.search_untappd
+          render text: {result: "<li class='beers'>Error logging in</li>", id: params[:id]}.to_json
         end
-      else
-        render text:  "error" #beer.error
       end
-     else
-       render :text => "Error, no cookie"
-     end
+      render text: {result: render_to_string(beer), id: params[:id]}.to_json
+    else
+      render text: {result: "<li class='beers'>No cookie</li>", id: params[:id]}.to_json
+    end
   end
   
   private
