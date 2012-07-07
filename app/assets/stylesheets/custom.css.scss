@@ -105,6 +105,18 @@ input, textarea, select, .uneditable-input {
   width: 100%;
   padding: 10px;
   height: auto;
-  margin-bottom: 15px;
+  margin-bottom: 0px;
+  @include box_sizing;
+}
+
+/* listing of beers */
+
+.beers {
+  list-style: none;
+  border: 1px solid #bbb;
+  width: 100%;
+  padding: 10px;
+  height: auto;
+  margin-bottom: 0px;
   @include box_sizing;
 }

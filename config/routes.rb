@@ -1,5 +1,6 @@
 Newbeer4me::Application.routes.draw do
   root to: 'beers#index'
+  post '/search',  to: 'beers#search'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

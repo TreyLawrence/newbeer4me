@@ -2,14 +2,18 @@ class BeersController < ApplicationController
   before_filter :get_session, only: [:index, :search]
   
   def index
-    @debug_string << "Visiting index\n"
-    @browser = Mechanize.new
+    @debug_string << "Visiting index, creating new mechanize object\n"
     
+    #If there is no cookie present, and the user submitted a form with username and password
     if !@user_cookie_present && params[:untappd_info]
       @debug_string << "Sign in form completed\n"
+      
+      #Check to see if the username and passwword were both filled out
       if params[:untappd_info][:username].empty? || params[:untappd_info][:password].empty?
+        #If not, then flash an error
         flash[:error] = "Invalid Username/Password combination."
       else
+        #Otherwise attempt to sign into untappd
         @debug_string << "Form values: username: #{params[:untappd_info][:username]} password: #{params[:untappd_info][:password]}\n"
         @session.username = params[:untappd_info][:username]
         @password = params[:untappd_info][:password]
@@ -30,16 +34,33 @@ class BeersController < ApplicationController
   def search
     if @user_cookie_present && params[:search]
       @debug_string << "Searching for #{params[:search]}\n"
-      @input_beers.merge! = params[:search].chomp.strip
-      @results = @input_beers.each do |beer|
-        search_untappd spell_check beer
+      beer = Beer.new(params[:search].chomp.strip, @browser)
+      if beer.spell_check?
+        render :text => "Spell Check" #beer.spelling_correction
+      elsif beer.search_untappd
+        render :text => "Check in"#beer.checked_in
+      elsif beer.errors.include? "User not signed in"
+        sing_in_to_untappd
+        if beer.search_untappd
+          render :text => "Check in" #beer.checked_in
+        else
+          render text: "Error" # beer.error
+        end
+      else
+        render text:  "error" #beer.error
       end
-    end
+     else
+       render :text => "Error, no cookie"
+     end
   end
   
   private
     def get_session
+      #initialize debug string and mechanize object if they haven't already been created
+      @browser = Mechanize.new unless @mechanize
       @debug_string = "" if @debug_string.nil?
+      
+      #Check for session cookie
       if session[:name].blank? || session[:password].blank?
         @debug_string << "Cookie doesn't exist\n"
         @user_cookie_present = false
@@ -81,32 +102,6 @@ class BeersController < ApplicationController
       else
         @debug_string << "Successfully logged in\n"
         true
-      end
-    end
-    
-    def search_untappd beer
-      # Visit each beer page and check to see if it's been checked in yet
-      @debug_string << "Searching Untappd for #{beer.split('+').join(' ')}\n"
-      page = @browser.get("http://untappd.com/search?q=#{beer}")
-      
-      if page.uri.path.include? "login"
-        sign_in_to_untappd
-      end
-      
-      beer_links = page.links.select { |link| link.uri.to_s[/beer\/\d+/] }
-      # beer_links.each do |link|
-      link = beer_links[0]
-      if link.nil?
-        @debug_string << "Search has no results\n"
-        [beer,nil]
-      else
-        if Nokogiri::HTML(link.click.body).css('.drank.tip').to_s.empty?
-          @debug_string << "You have had #{link.to_s} before\n"
-          [link.to_s,true]
-        else
-          @debug_string << "You have not had this beer before\n"
-          [link.to_s,false]
-        end
       end
     end
 end
