@@ -35,10 +35,12 @@ class Beer
       if link.nil?
         result.merge!({error: "No search results"})
       else
-        if Nokogiri::HTML(link.click.body).css('.drank.tip').to_s.empty?
-          result.merge!({check_in: "You have not had #{link.text} yet"})
+        doc = Nokogiri::HTML(link.click.body)
+        brewery_and_beer_name = doc.css('a').select {|link| link['href'].include? "brewery" }.first.text + ' ' + link.text
+        if doc.css('.drank.tip').to_s.empty?
+          result.merge!({check_in: "You have not had #{brewery_and_beer_name} yet"})
         else
-          result.merge!({check_in: "You have had  #{link.text} already"})
+          result.merge!({check_in: "You have had  #{brewery_and_beer_name} already"})
         end
       end
       true
