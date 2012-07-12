@@ -1,6 +1,6 @@
 <li class="beers" >
   <%= beer.name %>
   <% beer.result.each do |key, result| %>
-    <%= content_tag(:span, result)%>
+    <%= content_tag(:span, result, :class => key)%>
   <% end %>
 </li>

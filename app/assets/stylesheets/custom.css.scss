@@ -120,3 +120,10 @@ input, textarea, select, .uneditable-input {
   margin-bottom: 0px;
   @include box_sizing;
 }
+
+/* spell check */
+
+.spell_check {
+  color: #999;
+  padding: 10px;
+}
