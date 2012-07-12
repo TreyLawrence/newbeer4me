@@ -16,13 +16,18 @@ class Beer
     if correction_link.nil?
       false
     else
-      result.merge!({spell_check: correction_link.text.split[0..-2].join(' ')})
+      result.merge!({spell_check: "Spell checked to: " + correction_link.text.split[0..-2].join(' ')})
       true
     end
   end
   
   def search_untappd
-    query = (result[:spell_check]) ? result[:spell_check] : @name
+    if result[:spell_check]
+      query = result[:spell_check]
+      query.slice!("Spell checked to: ")
+    else
+      query = @name
+    end
     page = @browser.get("http://untappd.com/search?q=#{query}")
     
     if page.links.select { |link| link.uri.to_s[/login/]}.empty?
