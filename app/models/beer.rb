@@ -23,8 +23,7 @@ class Beer
   
   def search_untappd
     if result[:spell_check]
-      query = result[:spell_check]
-      query.slice!("Spell checked to: ")
+      query = result[:spell_check].gsub("Spell checked to: ", "")
     else
       query = @name
     end
