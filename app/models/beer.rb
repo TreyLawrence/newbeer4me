@@ -7,7 +7,7 @@ class Beer
     @errors = ""
     @browser = mechanize_object
     @name = beer_name
-    @result = {}
+    @result = {name: "Searched for #{@name}"}
   end
   
   def spell_check?
@@ -33,14 +33,14 @@ class Beer
       beer_links = page.links.select { |link| link.uri.to_s[/beer\/\d+/] }
       link = beer_links[0]
       if link.nil?
-        result.merge!({error: "No search results"})
+        result.merge!({untappd: "No search results"})
       else
         doc = Nokogiri::HTML(link.click.body)
         brewery_and_beer_name = doc.css('a').select {|link| link['href'].include? "brewery" }.first.text + ' ' + link.text
         if doc.css('.drank.tip').to_s.empty?
-          result.merge!({check_in: "You have not had #{brewery_and_beer_name} yet"})
+          result.merge!({untappd: "You have not had #{brewery_and_beer_name} yet"})
         else
-          result.merge!({check_in: "You have had  #{brewery_and_beer_name} already"})
+          result.merge!({untappd: "You have had  #{brewery_and_beer_name} already"})
         end
       end
       true
