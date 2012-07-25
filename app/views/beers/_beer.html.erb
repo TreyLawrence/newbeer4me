@@ -1,6 +1,6 @@
-<li class="beers" >
-  <%= beer.name %>
-  <% beer.result.each do |key, result| %>
-    <%= content_tag(:span, result, :class => key)%>
+<div data-role="collapsible" data-content-theme="c">
+  <h3><%= beer.result[:untappd] %></h3>
+	<% beer.result.each do |key, result| %>
+    <p><%= content_tag(:span, result, :class => key) unless key == :untappd %></p>
   <% end %>
-</li>
+</div>
