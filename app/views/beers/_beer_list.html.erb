@@ -1,57 +1,9 @@
-<title>New Beer!</title>
-<h1>Beer Search</h1>
-
-<div class="row">
-  <div class="span6 offset3">
-    <% flash.each do |key, value| %>
-      <%= content_tag(:div, value, class: "alert alert-#{key}") %>
-    <% end %>
-    <input id="search_beer" placeholder="Beer..." name="search[beer]" size="30" type="text" autocorrect="off" autocapitalize="off">    
-  </div>
+<div data-role="controlgroup" data-type="horizontal" align="center">
+  <a href="index.html" data-role="button">Beer</a>
+  <a href="index.html" data-role="button">Venue</a>
 </div>
 
-<script>
-var ENTER = 13;
-var beer_number = 0
-var image = "<img alt='Busy' src='/assets/Haters_Gonna_Hate.gif' width = '40' align='right' >"
-$("#search_beer").keypress(function(event) {
-  if ( event.which == ENTER ) {
-     event.preventDefault();
-     var text = $('#search_beer').val().trim();
-     if ( text ) {
-       beer_number++;
-       $('#search_beer').val('');
-       $('<li>'+text+'</li>').addClass('beers')
-       .prepend(image).hide().insertAfter('input:first').slideDown('slow');
-       $.ajaxSetup({
-         beforeSend: function(xhr) {
-           xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
-         }
-       });
-       $.ajax({
-         type: "POST",
-         url: "/search",
-         //dataType: 'json',
-         data: {search: text, id: beer_number}
-       }).done(function( msg ) {
-         var obj = jQuery.parseJSON(msg);
-         $('li').eq(obj.id - beer_number).replaceWith(obj.result);
-       });
-     }
-   }
-});
+<input id="search_beer" placeholder="Beer..." name="search[beer]" size="30" type="text" autocorrect="off" autocapitalize="off">
 
-// $(function () {
-//     $('li').live('click', function () {
-//         var input = $('<input />', {'type': 'text', 'name': 'name', 'value': $(this).html()});
-//         $(this).parent().append(input);
-//         $(this).remove();
-//         input.focus();
-//     });
-//     
-//     $('input').live('blur', function () {
-//         $(this).parent().append($('<li />').addClass('beers').html($(this).val()));
-//         $(this).remove();
-//     });
-// });
-</script>
+<div data-role="collapsible-set">
+</div>
