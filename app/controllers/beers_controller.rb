@@ -1,9 +1,9 @@
 class BeersController < ApplicationController
-  before_filter :get_session, only: [:index, :search]
+  before_filter :get_session, only: [:index, :search, :settings]
   
   def index
     #If there is no cookie present, and the user submitted a form with username and password
-    if !@user_cookie_present && params[:untappd_info]
+    if !@user_signed_in && params[:untappd_info]
       @debug_string << "Sign in form completed\n"
       
       #Check to see if the username and passwword were both filled out
@@ -23,14 +23,14 @@ class BeersController < ApplicationController
           @session.save
           session[:name] = @session.username
           session[:password] = @password
-          @user_cookie_present = true
+          @user_signed_in = true
         end
       end
     end
   end
   
   def search
-    if @user_cookie_present && params[:search]
+    if @user_signed_in && params[:search]
       @debug_string << "Searching for #{params[:search]}\n"
       beer = Beer.new(params[:search].chomp.strip, @browser)
       beer.spell_check?
@@ -46,22 +46,26 @@ class BeersController < ApplicationController
     end
   end
   
+  def settings
+    
+  end
+  
   private
     def get_session
       #initialize debug string and mechanize object if they haven't already been created
-      @browser = Mechanize.new unless @mechanize
-      @debug_string = "" if @debug_string.nil?
+      @browser ||= Mechanize.new
+      @debug_string ||= ""
       
       #Check for session cookie
       @debug_string = "" if @debug_string.nil?
       if session[:name].blank? || session[:password].blank?
         @debug_string << "Cookie doesn't exist\n"
-        @user_cookie_present = false
+        @user_signed_in = false
         @session = Session.new
         @session.last_seen_at = Time.new
       else
         @debug_string << "Cookie exists\n"
-        @user_cookie_present = true
+        @user_signed_in = true
         @session = Session.find_by_username(session[:name])
         @session.last_seen_at = Time.new
         @session.save
