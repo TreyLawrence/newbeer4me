@@ -1,0 +1,9 @@
+<div data-role="collapsible" data-content-theme="c" class="venue<%= venue.id %>">
+  <h3><%= venue.result[:beer_menus] %></h3>
+	<% venue.result.each do |key, result| %>
+    <%= content_tag(:p, result, :class => key) %>
+  <% end %>
+  <div data-role="collapsible-set" class="venue<%= venue.id %>_beers">
+    <%= render venue.beers unless venue.beers.nil?%>
+  </div>
+</div>

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
   <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
   <script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+  <title>NewBeer4Me</title>
 </head>
 <body>
   <div data-role="page" id="first">
@@ -17,10 +18,11 @@
       <%= yield %>
       <%= render 'layouts/debug' if Rails.env.development? %>
       <%= debug(params) if Rails.env.development? %>
-    </div><!-- /content -->
+    </div>
+    
     <div data-role="footer">
       <h6></h6>
-    </div><!-- /footer -->
-  </div><!-- /page -->
+    </div>
+  </div>
 </body>
 </html>

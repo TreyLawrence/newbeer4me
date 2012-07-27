@@ -1,12 +1,13 @@
 class Beer
   include ActiveModel::Validations
-  attr_accessor :name, :result
+  attr_accessor :name, :result, :id
   validates :name, presence: true
   
-  def initialize beer_name, mechanize_object
+  def initialize beer_name, beer_id, mechanize_object
     @errors = ""
     @browser = mechanize_object
     @name = beer_name
+    @id = beer_id
     @result = {name: "Searched for #{@name}"}
   end
   
@@ -29,8 +30,8 @@ class Beer
     end
     page = @browser.get("http://untappd.com/search?q=#{query}")
     
-    if page.links.select { |link| link.uri.to_s[/login/]}.empty?
-      beer_links = page.links.select { |link| link.uri.to_s[/beer\/\d+/] }
+    if page.links.select { |link| link.uri.to_s[/login/] rescue nil}.empty?
+      beer_links = page.links.select { |link| link.uri.to_s[/beer\/\d+/] rescue nil }
       link = beer_links[0]
       if link.nil?
         result.merge!({untappd: "No search results"})
@@ -45,6 +46,7 @@ class Beer
       end
       true
     else
+      result.merge!({untappd: "Error logging into Untappd"})
       false
     end
   end
