@@ -5,6 +5,7 @@ Newbeer4me::Application.routes.draw do
   match '/signin', to: 'sessions#new'
   match '/logout', to: 'sessions#destroy'
   match '/disable', to: 'beers#disable_foursquare'
+  match '/checkin', to: 'beers#checkin'
 
   resources :sessions, only: [:new, :create, :destroy]
   

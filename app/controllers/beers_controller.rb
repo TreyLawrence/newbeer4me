@@ -48,6 +48,7 @@ class BeersController < ApplicationController
   
   def checkin
     logger.info "We received a checkin!!!!!!!!!!?????????!!!!!!!!!!"
+    logger.info "These be the params: #{params}"
   end
   
   def disable_foursquare
