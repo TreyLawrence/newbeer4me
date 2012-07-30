@@ -1,5 +1,5 @@
 class BeersController < ApplicationController
-  before_filter :signed_in_user, only: [:index, :search, :settings, :destroy]
+  before_filter :signed_in_user, only: [:index, :search, :settings, :destroy, :checkin]
   
   def index
   end
@@ -47,8 +47,24 @@ class BeersController < ApplicationController
   end
   
   def checkin
+    @test = params
     logger.info "We received a checkin!!!!!!!!!!?????????!!!!!!!!!!"
-    logger.info "These be the params: #{params}"
+    logger.info "params symbolized = #{JSON.parse(params[:checkin])['id']}"
+    url = 'https://api.foursquare.com/v2/checkins/' + 
+          "#{JSON.parse(params[:checkin])['id']}/reply" + 
+          "?oauth_token=#{current_user.foursquare_token}" +
+          "&text=#{"Nice check-in bitch-face ass-car".gsub(" ", "%20")}"
+
+    logger.info "url = #{url ? url : "nil"}"
+    logger.info "username = #{current_user.untappd_username ? current_user.untappd_username : 'nil'}"
+    logger.info "password = #{current_user.password ? current_user.password : 'nil'}"
+    logger.info "foursquare = #{current_user.foursquare_token ? current_user.foursquare_token : 'nil'}"
+                        
+    page = browser.post('https://api.foursquare.com/v2/checkins/' + 
+                        "#{JSON.parse(params[:checkin])['id']}/reply" + 
+                        "?oauth_token=#{current_user.foursquare_token}" +
+                        "&text=#{"Nice check-in bitch-face ass-car".gsub(" ", "%20")}")
+    logger.info "page = #{page unless page.nil?}"
   end
   
   def disable_foursquare
