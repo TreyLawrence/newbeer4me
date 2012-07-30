@@ -25,7 +25,18 @@ class BeersController < ApplicationController
   end
   
   def settings
-    
+    if params[:error]
+      current_user.foursquare_token = nil
+    elsif params[:code]
+      page = browser.get("https://foursquare.com/oauth2/access_token?client_id=#{client_id}&client_secret=#{client_secret}&grant_type=authorization_code&redirect_uri=https://newbeer4me.herokuapp.com/settings&code=#{params[:code]}")
+      current_user.foursquare_token = JSON.parse(page.body)[:access_token]
+    end
+    @foursquare = !!current_user.foursquare_token
+  end
+  
+  def disable_foursquare
+    logger.debug "Ajax worked!!"
+    current_user.foursquare_token = nil
   end
   
   def destroy
@@ -40,6 +51,10 @@ class BeersController < ApplicationController
   end
 
   private
+    
+    def client_secret
+      "SDXVH1EYDJJHJPLJPNN0JJGIMZLQZTFSXNRH1MHKR3SLPRR0"
+    end
     
     def client_id
       "DLTI5SNFPYNXCV4AKZYYPZWXOFWLS3B2ZBGOWEC1DB1NO3BJ"

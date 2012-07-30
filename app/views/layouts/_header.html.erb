@@ -5,7 +5,7 @@
     <% if yield(:title) == "Search" %>
       <a href="/settings">Settings</a>
     <% else %>
-      <a href="/">Back</a>
+      <a href="/" data-icon="arrow-l">Back</a>
     <% end %>
     <h1><%= yield(:title) %></h1>
     <a href="/logout">Log Out</a>

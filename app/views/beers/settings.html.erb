@@ -3,6 +3,6 @@
 <h2>Foursquare</h2>
 <label for="flip-1">Connect Foursquare Account?</label>
 <select name="flip-1" id="flip-1" data-role="slider">
-	<option value="off">Off</option>
-	<option value="on">On</option>
+	<option value="off" <%= "selected" if !@foursquare %>>Off</option>
+	<option value="on" <%= "selected" if @foursquare %>>On</option>
 </select>
