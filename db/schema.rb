@@ -11,13 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120706030618) do
+ActiveRecord::Schema.define(:version => 20120728202924) do
 
-  create_table "sessions", :force => true do |t|
-    t.string   "username"
+  create_table "users", :force => true do |t|
+    t.string   "untappd_username"
     t.datetime "last_seen_at"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.string   "foursquare_token"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
 end

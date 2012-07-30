@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  untappd_username: MyString
+  last_seen_at: 2012-07-28 16:29:24
+  foursquare_token: MyString
+
+two:
+  untappd_username: MyString
+  last_seen_at: 2012-07-28 16:29:24
+  foursquare_token: MyString

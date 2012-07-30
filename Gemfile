@@ -6,6 +6,8 @@ gem 'nokogiri', '1.5.5'
 gem 'mechanize', '2.5.1'
 gem 'thin'
 gem 'pry-rails'
+gem 'foursquare2'
+gem 'oauth2'
 
 group :production do
   gem 'pg', '0.12.2'

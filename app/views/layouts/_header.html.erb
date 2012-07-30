@@ -1,12 +1,13 @@
 <div data-role="header">
-  <% if @user_signed_in %>
-    <select id="select-choice"  data-native-menu="false">
-      <option value="standard">Search</option>
-      <option value="rush">Settings</option>
-      <option value="rush">Log Out</option>
-    </select>        
-    <h1>Search</h1>
-  <% else %>
+  <% if yield(:title) == "Sign In" %>
     <h1>Sign In</h1>
+  <% else %>
+    <% if yield(:title) == "Search" %>
+      <a href="/settings">Settings</a>
+    <% else %>
+      <a href="/">Back</a>
+    <% end %>
+    <h1><%= yield(:title) %></h1>
+    <a href="/logout">Log Out</a>
   <% end %>
-</div><!-- /header -->
+</div>

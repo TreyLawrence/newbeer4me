@@ -1,5 +1,12 @@
-<% if !@user_signed_in %>
-  <%= render "sign_in" %>
-<% else %>
-  <%= render "beer_list" %>
-<% end %>
+<% provide(:title, "Search") %>
+<div data-role="navbar">
+	<ul>
+		<li><a title="beer" href="#" data-role="button" class="ui-btn-active">Beer</a></li>
+		<li><a title="venue" href="#" data-role="button">Venue</a></li>
+	</ul>
+</div>
+
+<input id="search_beer" placeholder="Beer..." name="search[beer]" size="30" type="text" autocorrect="off" autocapitalize="off">
+
+<div data-role="collapsible-set">
+</div> 

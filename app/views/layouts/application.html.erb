@@ -17,7 +17,7 @@
     <div data-role="content">
       <%= yield %>
       <%= render 'layouts/debug' if Rails.env.development? %>
-      <%= debug(params) if Rails.env.development? %>
+      <%= debug(params) if Rails.env.development? && params%>
     </div>
     
     <div data-role="footer">

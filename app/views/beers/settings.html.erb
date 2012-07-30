@@ -1,18 +1,8 @@
-<title>Settings</title>
+<% provide(:title, "Settings") %>
 <h1>Settings</h1>
-
-<%= form_for(:user) do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
-
-  <%= f.label :email %>
-  <%= f.text_field :email %>
-
-  <%= f.label :password %>
-  <%= f.password_field :password %>
-
-  <%= f.label :password_confirmation, "Confirm Password" %>
-  <%= f.password_field :password_confirmation %>
-
-  <%= f.submit "Save changes", class: "btn btn-large btn-primary" %>
-<% end %>
+<h2>Foursquare</h2>
+<label for="flip-1">Connect Foursquare Account?</label>
+<select name="flip-1" id="flip-1" data-role="slider">
+	<option value="off">Off</option>
+	<option value="on">On</option>
+</select>

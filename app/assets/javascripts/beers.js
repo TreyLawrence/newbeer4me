@@ -37,6 +37,15 @@ $(document).ready(function() {
 	});
 });
 
+$('div.ui-slider').change(function() {
+	if ($('[style="width: 100%; "]').text() == "On")
+	{
+
+	} else {
+
+	}
+});
+
 $(function() {
     $("a").click(function(){
         var title = $(this).attr("title");
