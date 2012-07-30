@@ -25,11 +25,23 @@ class BeersController < ApplicationController
   end
   
   def settings
+    logger.info "Inside Settings!!!!!!!!!!!!!!!"
+    logger.info "#{params}"
     if params[:error]
       current_user.foursquare_token = nil
     elsif params[:code]
-      page = browser.get("https://foursquare.com/oauth2/access_token?client_id=#{client_id}&client_secret=#{client_secret}&grant_type=authorization_code&redirect_uri=https://newbeer4me.herokuapp.com/settings&code=#{params[:code]}")
-      current_user.foursquare_token = JSON.parse(page.body)[:access_token]
+      logger.info "Attempting to get access token"
+      page = browser.get('https://foursquare.com/oauth2/access_token' + 
+                        "?client_id=#{client_id}" + 
+                        "&client_secret=#{client_secret}" + 
+                        "&grant_type=authorization_code" + 
+                        '&redirect_uri=https://newbeer4me.herokuapp.com/settings' + 
+                        "&code=#{params['code']}")
+      logger.info "access token: #{JSON.parse(page.body)['access_token'].nil? ? "nil" : JSON.parse(page.body)['access_token']}"
+      current_user.foursquare_token = JSON.parse(page.body)['access_token']
+      if JSON.parse(page.body)['access_token']
+        current_user.save
+      end
     end
     @foursquare = !!current_user.foursquare_token
   end
