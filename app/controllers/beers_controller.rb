@@ -46,8 +46,11 @@ class BeersController < ApplicationController
     @foursquare = !!current_user.foursquare_token
   end
   
+  def checkin
+    logger.info "We received a checkin!!!!!!!!!!?????????!!!!!!!!!!"
+  end
+  
   def disable_foursquare
-    logger.debug "Ajax worked!!"
     current_user.foursquare_token = nil
   end
   
