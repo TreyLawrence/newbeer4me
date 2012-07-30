@@ -12,8 +12,8 @@ $(document).ready(function() {
 			if ( text ) {
 				search_count[search_type] += 1;
 				$('#search_beer').val('');
-				$(collapsible_left + text + collapsible_right).addClass(search_type+search_count[search_type]).prependTo('[data-role="collapsible-set"]:first');
-				$('[data-role="collapsible-set"]').collapsibleset('refresh');
+				$(collapsible_left + text + collapsible_right).addClass(search_type+search_count[search_type]).prependTo('[data-role="collapsible-set"].'+search_type+'s');
+				$('[data-role="collapsible-set"].'+search_type+'s').collapsibleset('refresh');
 				$.ajaxSetup({
 					beforeSend: function(xhr) {
 						xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
@@ -27,7 +27,7 @@ $(document).ready(function() {
 				}).done(function( msg ) {
 					var obj = jQuery.parseJSON(msg);
 					$('[data-role="collapsible"].'+obj.type+obj.id).replaceWith(obj.result);
-					$('[data-role="collapsible-set"]:first').collapsibleset('refresh');
+					$('[data-role="collapsible-set"].'+obj.type+'s').collapsibleset('refresh');
 					if(obj.type == "venue") {
 						$('[data-role="collapsible-set"].venue'+obj.id+'_beers').trigger('create').collapsibleset().collapsibleset('refresh');
 					}
@@ -52,13 +52,15 @@ $(function() {
         if (title == "beer"){
 			$(this).addClass("ui-btn-active");
 			$('a[title="venue"]').removeClass("ui-btn-active");
-			$('[data-role="collapsible"]').remove();
+			$('[data-role="collapsible-set"].venues').hide();
+			$('[data-role="collapsible-set"].beers').show();			
 			search_type = 'beer';
 		} else if (title == "venue") {
 			$(this).addClass("ui-btn-active");
 			$('a[title="beer"]').removeClass("ui-btn-active");
 			search_type = 'venue';
-			$('[data-role="collapsible"]').remove();
+			$('[data-role="collapsible-set"].beers').hide();
+			$('[data-role="collapsible-set"].venues').show();
 		}
     });
 });
