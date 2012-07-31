@@ -1,13 +1,14 @@
 Newbeer4me::Application.routes.draw do
-  root to: 'beers#index'
   post '/search',  to: 'beers#search'
-  match '/settings', to: 'beers#settings'
+  match '/settings', to: 'beers#settings', :as => "settings"
   match '/signin', to: 'sessions#new'
   match '/logout', to: 'sessions#destroy'
   match '/disable', to: 'beers#disable_foursquare'
   match '/checkin', to: 'beers#checkin'
 
   resources :sessions, only: [:new, :create, :destroy]
+  
+  root :to => 'beers#index'
   
   # The priority is based upon order of creation:
   # first created -> highest priority.

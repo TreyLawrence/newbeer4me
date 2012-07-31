@@ -5,13 +5,13 @@ var collapsible_left = '<div data-role="collapsible" data-content-theme="c"><h3>
 var collapsible_right = "<img alt='Busy' src='/assets/busy.gif' align='right' ></h3><p>...</p></div>";
 var search_type = 'beer';
 $(document).ready(function() {
-	$("#search_beer").keypress(function(event) {
+	$("#search").keypress(function(event) {
 		if ( event.which == ENTER ) {
 			event.preventDefault();
-			var text = $('#search_beer').val().trim();
+			var text = $('#search').val().trim();
 			if ( text ) {
 				search_count[search_type] += 1;
-				$('#search_beer').val('');
+				$('#search').val('');
 				$(collapsible_left + text + collapsible_right).addClass(search_type+search_count[search_type]).prependTo('[data-role="collapsible-set"].'+search_type+'s');
 				$('[data-role="collapsible-set"].'+search_type+'s').collapsibleset('refresh');
 				$.ajaxSetup({
@@ -62,12 +62,14 @@ $(function() {
     $("a").click(function(){
         var title = $(this).attr("title");
         if (title == "beer"){
+			$('#search').attr("placeholder", "Beer...");
 			$(this).addClass("ui-btn-active");
 			$('a[title="venue"]').removeClass("ui-btn-active");
 			$('[data-role="collapsible-set"].venues').hide();
 			$('[data-role="collapsible-set"].beers').show();			
 			search_type = 'beer';
 		} else if (title == "venue") {
+			$('#search').attr("placeholder", "Venue...");
 			$(this).addClass("ui-btn-active");
 			$('a[title="beer"]').removeClass("ui-btn-active");
 			search_type = 'venue';

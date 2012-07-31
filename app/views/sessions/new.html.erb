@@ -6,14 +6,15 @@
 <% end %>
 
 <%= form_for :untappd_info, url: sessions_path do |f| %>
-
+  
   <%= f.label :username %>
   <%= f.text_field :username %>
 
   <%= f.label :password %>
   <%= f.password_field :password %>
 
-  <%= f.submit "Sign in", class: "btn btn-large btn-primary" %>
+  <%= f.submit "Sign in" %>
+  
 <% end %>
 
 <p><%= link_to "Not an Untappd user?", "http://untappd.com/create" %></p>

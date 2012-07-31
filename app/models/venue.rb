@@ -1,5 +1,6 @@
 class Venue
   include ActiveModel::Validations
+  include ApplicationHelper
   attr_accessor :name, :result, :beers, :id
   validates :name, presence: true
   
@@ -8,6 +9,7 @@ class Venue
     @name = venue_name
     @id = venue_id
     @result = {name: "Searched for #{@name}"}
+    @beers = []
   end
   
   def search_beer_menus

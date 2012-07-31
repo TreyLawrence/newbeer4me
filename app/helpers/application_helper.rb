@@ -6,16 +6,11 @@ module ApplicationHelper
     })
 
     #Verify that the sign in was successful
-    username_link = page.link_with(:text => /Profile/)
+    username_link = page.links.select { |link| link.to_s =~ /Profile/ rescue nil }
     if username_link.nil?
       logger.debug "Sign-in to untappd unsuccessful"
       sign_out
       false
-    elsif !username_link.uri.path.include? current_user.untappd_username
-      #If incorrect username, sign out (hopefully this should never happen)
-      page.link_with(:text => /Log Out/).click
-      #And try to sign in again
-      sign_in_to_untappd
     else
       true
     end
@@ -25,21 +20,15 @@ module ApplicationHelper
     @browser ||= Mechanize.new
   end
   
-  def sign_in(user)
-    cookies.permanent[:remember_token] = user.remember_token
-    self.current_user = user
-  end
-  
   def signed_in?
-    if current_user
-      # load in password from cookie
+    if session[:password].nil? || session[:password].empty?
+      false
+    else
       current_user.password = session[:password]
       page = browser.get('http://untappd.com/')
       if page.link_with(:text => /Profile/).nil?
         sign_in_to_untappd
       end
-    else
-      false
     end
   end
   
@@ -60,16 +49,9 @@ module ApplicationHelper
     @current_user
   end
   
-  def current_user?(user)
-    user == current_user
-  end
-  
   def signed_in_user
-    logger.debug "\nChecking to see if user signed in"
     unless signed_in?
-      logger.debug "User not signed in"
-      store_location
-      redirect_to signin_path, notice: "Please sign in."
+      render 'sessions/new', notice: "Please sign in."
     end
   end
   
@@ -78,11 +60,6 @@ module ApplicationHelper
     self.current_user = nil
     session.delete(:name)
     session.delete(:password)
-  end
-  
-  def redirect_back_or(default)
-    redirect_to(session[:return_to] || default)
-    session.delete(:return_to)
   end
   
   def store_location

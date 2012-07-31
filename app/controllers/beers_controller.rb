@@ -7,15 +7,15 @@ class BeersController < ApplicationController
   def search
     if params[:search]
       if params[:type] == "beer"
-        beer = Beer.new(params[:search].strip, params[:id], @browser)
-        beer.spell_check?
+        beer = Beer.new(params[:search].strip, params[:id], browser)
+        beer.spell_check
         if beer.search_untappd
           render text: {result: render_to_string(beer), id: params[:id], type: params[:type]}.to_json
         else
           render text: {result: "Error logging in", id: params[:id], type: params[:type]}.to_json
         end
       else
-        venue = Venue.new(params[:search].strip, params[:id], @browser)
+        venue = Venue.new(params[:search].strip, params[:id], browser)
         venue.search_beer_menus
         render text: {result: render_to_string(venue), id: params[:id], type: params[:type]}.to_json
       end
@@ -23,7 +23,7 @@ class BeersController < ApplicationController
       render text: {result: "No cookie", id: params[:id], type: params[:type]}.to_json
     end
   end
-  
+
   def settings
     if params[:error]
       current_user.foursquare_token = nil
@@ -52,41 +52,33 @@ class BeersController < ApplicationController
   end
   
   def checkin
-    @test = params
-    logger.info "We received a checkin!!!!!!!!!!?????????!!!!!!!!!!"
-    logger.info "User id = #{JSON.parse(params[:checkin])['user']['id']}"
     current_user = User.find_by_foursquare_id(JSON.parse(params[:checkin])['user']['id'])
-    logger.info "Current user = #{current_user ? current_user : 'nil'}"
-    url = 'https://api.foursquare.com/v2/checkins/' + 
-          "#{JSON.parse(params[:checkin])['id']}/reply" + 
-          "?oauth_token=#{current_user.foursquare_token}" +
-          "&text=#{"Nice check-in bitch-face ass-car".gsub(" ", "%20")}"
-
-    logger.info "url = #{url ? url : "nil"}"
-    logger.info "username = #{current_user.untappd_username ? current_user.untappd_username : 'nil'}"
-    logger.info "password = #{current_user.password ? current_user.password : 'nil'}"
-    logger.info "foursquare = #{current_user.foursquare_token ? current_user.foursquare_token : 'nil'}"
-                        
-    page = browser.post('https://api.foursquare.com/v2/checkins/' + 
-                        "#{JSON.parse(params[:checkin])['id']}/reply" + 
-                        "?oauth_token=#{current_user.foursquare_token}" +
-                        "&text=#{"Nice check-in bitzch-face azs-car".gsub(" ", "%20")}")
-    logger.info "page = #{page unless page.nil?}"
+    shout = JSON.parse(params[:checkin])['shout']
+    logger.info ("Shout is #{JSON.parse(params[:checkin])['shout']}")
+    if current_user && (shout =~ /beer/i)
+      logger.info "Venue is #{JSON.parse(params[:checkin])['venue'] ? JSON.parse(params[:checkin])['venue'] : 'nil'}"
+      logger.info "Venue name is #{JSON.parse(params[:checkin])['venue']['name'] ? JSON.parse(params[:checkin])['venue']['name'] : 'nil'}"
+      venue = Venue.new(JSON.parse(params[:checkin])['venue']['name'], 1, browser)
+      venue.search_beer_menus
+      if venue.beers.count > 0
+        new_beer_names = 'Try these: ' + venue.beers.select { |beer| !beer.had}.map { |new_beer| new_beer.name}.join(' ')
+      else
+        new_beer_names = "This bar isn't on beermenus, bro :("
+      end
+      
+      begin
+        page = browser.post('https://api.foursquare.com/v2/checkins/' + 
+                            "#{JSON.parse(params[:checkin])['id']}/reply" + 
+                            "?oauth_token=#{current_user.foursquare_token}" +
+                            "&text=#{new_beer_names.gsub(' ', '%20')[0..160]}")
+      rescue Mechanize::Error => e
+        logger.info e
+      end
+    end
   end
   
   def disable_foursquare
     current_user.foursquare_token = nil
-  end
-  
-  def destroy
-    @debug_string << "Deleting session\n"
-    session[:password] = ""
-    session[:name] = ""
-    @session.destroy
-    @session = nil
-    @password = ""
-    @user_signed_in = false
-    redirect_to root_path
   end
 
   private

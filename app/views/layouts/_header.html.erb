@@ -3,11 +3,11 @@
     <h1>Sign In</h1>
   <% else %>
     <% if yield(:title) == "Search" %>
-      <a href="/settings">Settings</a>
+      <%= link_to "Settings", settings_path %>
     <% else %>
-      <a href="/" data-icon="arrow-l">Back</a>
+      <%= link_to "Back", root_path %>
     <% end %>
     <h1><%= yield(:title) %></h1>
-    <a href="/logout">Log Out</a>
+    <%= link_to "Log Out", logout_path %>
   <% end %>
 </div>
