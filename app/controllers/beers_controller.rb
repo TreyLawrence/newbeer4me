@@ -1,5 +1,5 @@
 class BeersController < ApplicationController
-  before_filter :signed_in_user, only: [:index, :search, :settings, :destroy, :checkin]
+  before_filter :signed_in_user, only: [:index, :search, :settings, :destroy]
   
   def index
   end
@@ -25,21 +25,26 @@ class BeersController < ApplicationController
   end
   
   def settings
-    logger.info "Inside Settings!!!!!!!!!!!!!!!"
-    logger.info "#{params}"
     if params[:error]
       current_user.foursquare_token = nil
+      current_user.foursquare_id = nil
+      current_user.save
     elsif params[:code]
-      logger.info "Attempting to get access token"
       page = browser.get('https://foursquare.com/oauth2/access_token' + 
                         "?client_id=#{client_id}" + 
                         "&client_secret=#{client_secret}" + 
                         "&grant_type=authorization_code" + 
                         '&redirect_uri=https://newbeer4me.herokuapp.com/settings' + 
                         "&code=#{params['code']}")
-      logger.info "access token: #{JSON.parse(page.body)['access_token'].nil? ? "nil" : JSON.parse(page.body)['access_token']}"
+                        
       current_user.foursquare_token = JSON.parse(page.body)['access_token']
-      if JSON.parse(page.body)['access_token']
+      
+      page = browser.get('https://api.foursquare.com/v2/users/self' + 
+                        "?oauth_token=#{current_user.foursquare_token}")
+                        
+      current_user.foursquare_id = JSON.parse(page.body)["response"]["user"]["id"]
+      
+      if current_user.foursquare_id && current_user.foursquare_token
         current_user.save
       end
     end
@@ -49,7 +54,9 @@ class BeersController < ApplicationController
   def checkin
     @test = params
     logger.info "We received a checkin!!!!!!!!!!?????????!!!!!!!!!!"
-    logger.info "params symbolized = #{JSON.parse(params[:checkin])['id']}"
+    logger.info "User id = #{JSON.parse(params[:checkin])['user']['id']}"
+    current_user = User.find_by_foursquare_id(JSON.parse(params[:checkin])['user']['id'])
+    logger.info "Current user = #{current_user ? current_user : 'nil'}"
     url = 'https://api.foursquare.com/v2/checkins/' + 
           "#{JSON.parse(params[:checkin])['id']}/reply" + 
           "?oauth_token=#{current_user.foursquare_token}" +
@@ -63,7 +70,7 @@ class BeersController < ApplicationController
     page = browser.post('https://api.foursquare.com/v2/checkins/' + 
                         "#{JSON.parse(params[:checkin])['id']}/reply" + 
                         "?oauth_token=#{current_user.foursquare_token}" +
-                        "&text=#{"Nice check-in bitch-face ass-car".gsub(" ", "%20")}")
+                        "&text=#{"Nice check-in bitzch-face azs-car".gsub(" ", "%20")}")
     logger.info "page = #{page unless page.nil?}"
   end
   

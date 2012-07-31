@@ -21,11 +21,12 @@ ActiveRecord::Schema.define(:version => 20120728202924) do
   end
 
   create_table "users", :force => true do |t|
-    t.string    "untappd_username"
-    t.timestamp "last_seen_at"
-    t.string    "foursquare_token"
-    t.timestamp "created_at",       :null => false
-    t.timestamp "updated_at",       :null => false
+    t.string   "untappd_username"
+    t.datetime "last_seen_at"
+    t.string   "foursquare_token"
+    t.string   "foursquare_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
   end
 
 end
