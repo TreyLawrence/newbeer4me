@@ -1,7 +1,7 @@
 class Venue
   include ActiveModel::Validations
   include ApplicationHelper
-  attr_accessor :name, :result, :beers, :id
+  attr_accessor :name, :result, :beers, :id, :spell_check
   validates :name, presence: true
   
   def initialize venue_name, venue_id, mechanize_object
@@ -10,6 +10,12 @@ class Venue
     @id = venue_id
     @result = {name: "Searched for #{@name}"}
     @beers = []
+  end
+  
+  def spell_check
+    doc = Nokogiri::HTML(@browser.get("http://www.google.com/search?q=#{@search + ' bar'}").body)
+    correction_link = doc.css('a').select { |link| link['href'].include? "spell=1" }.first
+    @spell_check = correction_link.text.split[0..-2].join(' ') if correction_link
   end
   
   def search_beer_menus

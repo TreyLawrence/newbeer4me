@@ -11,13 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120728202924) do
+ActiveRecord::Schema.define(:version => 20120803081006) do
 
   create_table "sessions", :force => true do |t|
-    t.string    "username"
-    t.timestamp "last_seen_at"
-    t.timestamp "created_at",   :null => false
-    t.timestamp "updated_at",   :null => false
+    t.string   "username"
+    t.datetime "last_seen_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "users", :force => true do |t|
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(:version => 20120728202924) do
     t.string   "foursquare_id"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+    t.string   "password_digest"
   end
 
 end

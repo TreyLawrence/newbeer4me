@@ -86,10 +86,10 @@ class BeersController < ApplicationController
   private
     
     def client_secret
-      "SDXVH1EYDJJHJPLJPNN0JJGIMZLQZTFSXNRH1MHKR3SLPRR0"
+      ENV['FS_CLIENT_SECRET']
     end
     
     def client_id
-      "DLTI5SNFPYNXCV4AKZYYPZWXOFWLS3B2ZBGOWEC1DB1NO3BJ"
+      ENV['FS_CLIENT_ID']
     end
 end

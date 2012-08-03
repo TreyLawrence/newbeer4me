@@ -21,10 +21,9 @@ module ApplicationHelper
   end
   
   def signed_in?
-    if session[:password].nil? || session[:password].empty?
+    if current_user.password.nil? || current_user.password.empty?
       false
     else
-      current_user.password = session[:password]
       page = browser.get('http://untappd.com/')
       if page.link_with(:text => /Profile/).nil?
         sign_in_to_untappd
@@ -59,7 +58,6 @@ module ApplicationHelper
     logger.debug "Logging out, deleting cookie name and password"
     self.current_user = nil
     session.delete(:name)
-    session.delete(:password)
   end
   
   def store_location

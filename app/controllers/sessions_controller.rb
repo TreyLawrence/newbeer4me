@@ -11,7 +11,6 @@ class SessionsController < ApplicationController
       if sign_in_to_untappd
         logger.debug "Successfully signed into untappd, save user and redirect to root path"
         session[:name] = current_user.untappd_username
-        session[:password] = current_user.password
         current_user.save
         render 'beers/index'
         return
