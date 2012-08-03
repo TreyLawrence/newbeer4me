@@ -4,11 +4,13 @@ class User < ActiveRecord::Base
   validates :password_digest, presence: true
   
   def password
-    @password ||= AES.decrypt(password_digest, ENV['UNTAPPD_KEY'])
+    @password ||= AES.decrypt(password_digest, ENV['UNTAPPD_KEY']) if password_digest
   end
   
   def password=(new_password)
-    @password = new_password
-    self.password_digest = AES.encrypt(new_password, ENV['UNTAPPD_KEY'])
+    if new_password
+      @password = new_password
+      self.password_digest = AES.encrypt(new_password, ENV['UNTAPPD_KEY'])
+    end
   end
 end

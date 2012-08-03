@@ -60,7 +60,7 @@ module ApplicationHelper
     session.delete(:name)
   end
   
-  def store_location
-    session[:return_to] = request.fullpath
-  end
+  # def store_location
+  #   session[:return_to] = request.fullpath
+  # end
 end

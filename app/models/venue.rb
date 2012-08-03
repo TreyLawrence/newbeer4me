@@ -13,7 +13,7 @@ class Venue
   end
   
   def spell_check
-    doc = Nokogiri::HTML(@browser.get("http://www.google.com/search?q=#{@search + ' bar'}").body)
+    doc = Nokogiri::HTML(@browser.get("http://www.google.com/search?q=#{@name + ' bar'}").body)
     correction_link = doc.css('a').select { |link| link['href'].include? "spell=1" }.first
     @spell_check = correction_link.text.split[0..-2].join(' ') if correction_link
   end
@@ -29,7 +29,7 @@ class Venue
       @beers = venue_page.links.select { |link| link.uri.to_s =~ /beers\/.+/}.map do |beer_link|
         Beer.new(beer_link.to_s, nil, @browser)
       end
-      @beers.each { |beer| beer.search_untappd}
+      @beers.each { |beer| beer.search_untappd }
     end
   end
 end
