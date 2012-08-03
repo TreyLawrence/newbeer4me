@@ -16,6 +16,7 @@ class BeersController < ApplicationController
         end
       else
         venue = Venue.new(params[:search].strip, params[:id], browser)
+        venue.spell_check
         venue.search_beer_menus
         render text: {result: render_to_string(venue), id: params[:id], type: params[:type]}.to_json
       end
@@ -52,6 +53,7 @@ class BeersController < ApplicationController
   end
   
   def checkin
+    render nothing: true
     current_user = User.find_by_foursquare_id(JSON.parse(params[:checkin])['user']['id'])
     shout = JSON.parse(params[:checkin])['shout']
     logger.info ("Shout is #{JSON.parse(params[:checkin])['shout']}")
