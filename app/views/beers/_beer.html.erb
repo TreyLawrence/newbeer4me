@@ -5,7 +5,7 @@
     <%= content_tag(:h3, beer.brewery + ' ' + beer.name) %>
   <% end %>
   
-  <%= content_tag(:p, "Searched for #{beer.search}") %>
+  <%= content_tag(:p, "Searched for #{beer.search}") if beer.search %>
   
   <%= content_tag(:p, "Spell checked to #{beer.spell_check}") if beer.spell_check %>
   
