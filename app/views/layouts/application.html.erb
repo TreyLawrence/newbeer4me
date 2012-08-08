@@ -11,7 +11,13 @@
   <title>NewBeer4Me</title>
 </head>
 <body>
-  <div data-role="page" id="first">
+  <% if yield(:title) == "Sign In"%>
+    <div data-role="page" data-url='/signin'>
+  <% elsif yield(:title) == "Search"%>
+    <div data-role="page" data-url='/'>
+  <% elsif yield(:title) == "Settings"%>
+    <div data-role="page" data-url='/settings'>
+  <% end %>
     <%= render 'layouts/header'%>
     <div data-role="content">
       <%= yield %>
