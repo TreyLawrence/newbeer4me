@@ -8,7 +8,7 @@ class BeersController < ApplicationController
     if params[:search]
       if params[:type] == "beer"
         beer = Beer.new(params[:search].strip, params[:id], browser)
-        beer.spell_check_beer
+        beer.spell_check
         if beer.search_untappd
           render text: {result: render_to_string(beer), id: params[:id], type: params[:type]}.to_json
         else
@@ -16,7 +16,7 @@ class BeersController < ApplicationController
         end
       elsif params[:type] == "venue"
         venue = Venue.new(params[:search].strip, params[:id], browser)
-        venue.spell_check_venue
+        venue.spell_check
         venue.search_untappd
         render text: {result: render_to_string(venue), id: params[:id], type: params[:type]}.to_json
       end
