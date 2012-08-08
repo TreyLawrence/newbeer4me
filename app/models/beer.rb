@@ -18,7 +18,7 @@ class Beer
   end
   
   def spell_check
-    if @spell_check.nil?
+    if @spell_check.nil? && @search
       search_result = @browser.get("http://www.google.com/search?q=#{@search + ' beer'}")
       correction_link = search_result.links.select { |link| link.uri.to_s =~ /spell=1/ }.first
       @spell_check = correction_link.to_s.split[0..-2].join(' ') if correction_link
