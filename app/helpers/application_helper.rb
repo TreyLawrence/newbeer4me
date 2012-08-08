@@ -42,7 +42,7 @@ module ApplicationHelper
   def current_user
     logger.info "Inside current_user"
     if @current_user.nil?
-      @current_user = User.find_by_untappd_username(session[:name]) unless session[:name].nil?
+      @current_user = User.find_by_untappd_username(session[:name])
       if @current_user.nil?
         logger.info "Couldn't find current user in database, creating new one"
         @current_user = User.new
