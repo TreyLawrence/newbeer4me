@@ -4,8 +4,7 @@ class SessionsController < ApplicationController
   
   def create
     if !(params[:untappd_info][:username].empty? && params[:untappd_info][:password].empty?)
-      session[:name] = params[:untappd_info][:username]
-      current_user.untappd_username = params[:untappd_info][:username]
+      session[:name] = params[:untappd_info][:username].downcase
       current_user.password = params[:untappd_info][:password]
       current_user.last_seen_at = Time.now
       logger.info 'Signing into untappd from SessionsController#create'

@@ -90,6 +90,7 @@ class BeersController < ApplicationController
   
   def disable_foursquare
     current_user.foursquare_token = nil
+    render nothing: true
   end
 
   private

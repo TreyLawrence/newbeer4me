@@ -46,6 +46,7 @@ module ApplicationHelper
       if @current_user.nil?
         logger.info "Couldn't find current user in database, creating new one"
         @current_user = User.new
+        @current_user.untappd_username = session[:name]
       else
         logger.info "Found current user in database"
       end
