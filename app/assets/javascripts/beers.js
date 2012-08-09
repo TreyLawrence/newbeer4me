@@ -28,7 +28,8 @@ $(document).ready(function() {
 					$('[data-role="collapsible"].'+obj.type+obj.id).replaceWith(obj.result);
 					$('[data-role="collapsible-set"].'+obj.type+'s').collapsibleset('refresh');
 					if(obj.type == "venue") {
-						$('[data-role="collapsible-set"].venue'+obj.id+'_beers').trigger('create').collapsibleset().collapsibleset('refresh');
+						$('[data-role="collapsible-set"].venue'+obj.id+'_beers_had').trigger('create').collapsibleset().collapsibleset('refresh');
+						$('[data-role="collapsible-set"].venue'+obj.id+'_beers_nothad').trigger('create').collapsibleset().collapsibleset('refresh');
 					}
 				});
 			}

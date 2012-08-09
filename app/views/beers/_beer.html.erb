@@ -2,7 +2,7 @@
   <% if beer.brewery.nil? || beer.name.nil? %>
     <%= content_tag(:h3, "No search results") %>
   <% else %>
-    <%= content_tag(:h3, beer.brewery + ' ' + beer.name) %>
+    <%= content_tag(:h3, (beer.had ? "Had " : "Not had ") + beer.brewery + ' ' + beer.name) %>
   <% end %>
   
   <%= content_tag(:p, "Searched for #{beer.search}") if beer.search %>

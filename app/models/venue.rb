@@ -21,7 +21,15 @@ class Venue
       @spell_check
     end
   end
+  
+  def new_beers
+    @new_beers ||= @beers.select { |beer| !beer.had } if @beers
+  end
 
+  def old_beers
+    @old_beers ||= @beers.select { |beer| beer.had } if @beers
+  end
+  
   # def search_beer_menus
   #   query = @spell_check || @search
   #   page = @browser.get("http://www.beermenus.com/search?q=#{@name}")

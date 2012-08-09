@@ -9,7 +9,13 @@
 
   <%= content_tag(:p, "Spell checked to #{venue.spell_check}") if venue.spell_check %>
 
-  <div data-role="collapsible-set" class="venue<%= venue.id %>_beers">
-    <%= render venue.beers unless venue.beers.nil?%>
+  <%= content_tag(:p, "New Beers(#{venue.new_beers.count}):" ) if venue.new_beers %>
+  <div data-role="collapsible-set" class="venue<%= venue.id %>_beers_nothad">
+    <%= render venue.new_beers if venue.new_beers %>
+  </div>
+
+  <%= content_tag(:p, "Old Beers(#{venue.new_beers.count}):" ) %>
+  <div data-role="collapsible-set" class="venue<%= venue.id %>_beers_had">
+    <%= render venue.old_beers if venue.old_beers %>
   </div>
 </div>

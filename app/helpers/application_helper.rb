@@ -40,7 +40,6 @@ module ApplicationHelper
   end
   
   def current_user
-    logger.info "Inside current_user"
     if @current_user.nil?
       @current_user = User.find_by_untappd_username(session[:name])
       if @current_user.nil?

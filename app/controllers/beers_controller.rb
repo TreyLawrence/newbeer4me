@@ -26,30 +26,35 @@ class BeersController < ApplicationController
   end
 
   def settings
+    @foursquare = current_user.foursquare_token
     if params[:error]
       current_user.foursquare_token = nil
       current_user.foursquare_id = nil
       current_user.save
     elsif params[:code]
-      page = browser.get('https://foursquare.com/oauth2/access_token' + 
-                        "?client_id=#{client_id}" + 
-                        "&client_secret=#{client_secret}" + 
-                        "&grant_type=authorization_code" + 
-                        '&redirect_uri=https://newbeer4me.herokuapp.com/settings' + 
-                        "&code=#{params['code']}")
-                        
-      current_user.foursquare_token = JSON.parse(page.body)['access_token']
-      
-      page = browser.get('https://api.foursquare.com/v2/users/self' + 
-                        "?oauth_token=#{current_user.foursquare_token}")
-                        
-      current_user.foursquare_id = JSON.parse(page.body)["response"]["user"]["id"]
-      
-      if current_user.foursquare_id && current_user.foursquare_token
-        current_user.save
+      begin
+        page = browser.get('https://foursquare.com/oauth2/access_token' + 
+                          "?client_id=#{client_id}" + 
+                          "&client_secret=#{client_secret}" + 
+                          "&grant_type=authorization_code" + 
+                          '&redirect_uri=https://newbeer4me.herokuapp.com/settings' + 
+                          "&code=#{params['code']}")
+
+        current_user.foursquare_token = JSON.parse(page.body)['access_token']
+
+        page = browser.get('https://api.foursquare.com/v2/users/self' + 
+                          "?oauth_token=#{current_user.foursquare_token}")
+
+        current_user.foursquare_id = JSON.parse(page.body)["response"]["user"]["id"]
+
+        if current_user.foursquare_id && current_user.foursquare_token
+          current_user.save
+        end
+        redirect_to settings_path
+      rescue Mechanize::Error => e
+        logger.info e
       end
     end
-    @foursquare = !!current_user.foursquare_token
   end
   
   def checkin
@@ -90,6 +95,7 @@ class BeersController < ApplicationController
   
   def disable_foursquare
     current_user.foursquare_token = nil
+    current_user.foursquare_id = nil
     render nothing: true
   end
 
