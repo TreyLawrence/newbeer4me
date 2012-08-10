@@ -3,5 +3,5 @@
 <% if @foursquare %>
   <%= content_tag(:p, "Your Foursquare account is connected") %>
 <% else %>
-  <%= content_tag(:a, image_tag("foursquare-connect.png"), href: "/enable", class: "foursquare") %>
+  <%= content_tag(:a, image_tag("foursquare-connect.png"), href: "#", class: "foursquare") %>
 <% end %>
