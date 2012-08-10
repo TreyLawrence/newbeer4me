@@ -1,8 +1,7 @@
 <% provide(:title, "Settings") %>
 <h1>Settings</h1>
-<h2>Foursquare</h2>
-<label for="flip-1">Connect Foursquare Account?</label>
-<select name="flip-1" id="flip-1" data-role="slider">
-	<option value="off" <%= "selected" if !@foursquare %>>Off</option>
-	<option value="on" <%= "selected" if @foursquare %>>On</option>
-</select>
+<% if @foursquare %>
+  <%= content_tag(:p, "Your Foursquare account is connected") %>
+<% else %>
+  <%= content_tag(:a, image_tag("foursquare-connect.png"), href: "/enable", class: "foursquare") %>
+<% end %>
