@@ -38,17 +38,12 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-	$('select').change(function() {
-		if ($(this).val() == "on")
-		{
-			alert("on!");
-		/*	window.location.href = "https://foursquare.com/oauth2/authenticate" +
-									"?client_id=DLTI5SNFPYNXCV4AKZYYPZWXOFWLS3B2ZBGOWEC1DB1NO3BJ" +
-									"&response_type=code" +
-									"&redirect_uri=https://newbeer4me.herokuapp.com/settings";
-									*/
-		} else {
-			alert("off!");
+	$('.ui-slider-label-a').change(function() {
+		//if ($(this).val() == "on")
+		//{
+			alert("changed!");
+		//} else {
+		//	alert("off!");
 			/*$.ajaxSetup({
 				beforeSend: function(xhr) {
 					xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
@@ -58,29 +53,34 @@ $(document).ready(function() {
 				type: "POST",
 				url: "/disable",
 			});*/
-		}
+		//}
 	});
 });
 
 $(function() {
-    $("a").click(function(){
-        var title = $(this).attr("title");
-        if (title == "beer"){
-			$('#search').attr("placeholder", "Beer...");
-			$(this).addClass("ui-btn-active");
-			$('a[title="venue"]').removeClass("ui-btn-active");
-			$('[data-role="collapsible-set"].venues').hide();
-			$('[data-role="collapsible-set"].beers').show();			
-			search_type = 'beer';
-		} else if (title == "venue") {
-			$('#search').attr("placeholder", "Venue...");
-			$(this).addClass("ui-btn-active");
-			$('a[title="beer"]').removeClass("ui-btn-active");
-			search_type = 'venue';
-			$('[data-role="collapsible-set"].beers').hide();
-			$('[data-role="collapsible-set"].venues').show();
-		}
+    $('a[title="beer"]').click(function(){
+		$('#search').attr("placeholder", "Beer...");
+		$(this).addClass("ui-btn-active");
+		$('a[title="venue"]').removeClass("ui-btn-active");
+		$('[data-role="collapsible-set"].venues').hide();
+		$('[data-role="collapsible-set"].beers').show();
+		search_type = 'beer';
+	});
+	$('a[title="venue"]').click(function(){
+		$('#search').attr("placeholder", "Venue...");
+		$(this).addClass("ui-btn-active");
+		$('a[title="beer"]').removeClass("ui-btn-active");
+		search_type = 'venue';
+		$('[data-role="collapsible-set"].beers').hide();
+		$('[data-role="collapsible-set"].venues').show();
     });
+	$('a.foursquare').click(function(){
+		$(this).replaceWith($(document.createElement("img")).attr("src","/assets/foursquare-busy.gif"));
+		window.location = "https://foursquare.com/oauth2/authenticate" +
+                    "?client_id=DLTI5SNFPYNXCV4AKZYYPZWXOFWLS3B2ZBGOWEC1DB1NO3BJ" +
+                    "&response_type=code" +
+                    "&redirect_uri=https://newbeer4me.herokuapp.com/settings"
+	});
 });
 
 }).call(this);
