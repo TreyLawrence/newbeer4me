@@ -15,7 +15,7 @@ class BeersController < ApplicationController
           render text: {result: "Error logging in", id: params[:id], type: params[:type]}.to_json
         end
       elsif params[:type] == "venue"
-        venue = Venue.new(params[:search].strip, params[:id], browser)
+        venue = Venue.new(params[:search].strip, params[:id], browser, logger)
         venue.spell_check
         venue.search_untappd
         render text: {result: render_to_string(venue), id: params[:id], type: params[:type]}.to_json
@@ -70,7 +70,7 @@ class BeersController < ApplicationController
       logger.info ("Shout is #{JSON.parse(params[:checkin])['shout']}")
     
       logger.info "Venue name is #{JSON.parse(params[:checkin])['venue']['name'] || 'nil'}"
-      venue = Venue.new(JSON.parse(params[:checkin])['venue']['name'], 1, browser)
+      venue = Venue.new(JSON.parse(params[:checkin])['venue']['name'], 1, browser, logger)
 
       if shout =~ /beer/i    
         if current_user && sign_in_to_untappd
@@ -107,7 +107,7 @@ class BeersController < ApplicationController
   def disable_foursquare
     current_user.foursquare_token = nil
     current_user.foursquare_id = nil
-    render nothing: true
+    render 'settings'
   end
 
   private
