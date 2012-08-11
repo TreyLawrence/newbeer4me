@@ -3,9 +3,10 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.6'
 gem 'nokogiri', '1.5.5'
 gem 'mechanize', '2.5.1'
-gem 'thin'
+gem 'thin', '1.4.1'
 gem 'pry-rails'
-gem 'aes'
+gem 'aes', '0.5.0'
+gem 'delayed_job_active_record', '0.3.2'
 
 group :production do
   gem 'pg', '0.12.2'
