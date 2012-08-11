@@ -60,19 +60,19 @@ class BeersController < ApplicationController
   def checkin
     render nothing: true
     current_user = User.find_by_foursquare_id(JSON.parse(params[:checkin])['user']['id'])
-    logger.info "Current user is #{current_user.untappd_username}"
+    logger.info "Current user is #{current_user.untappd_username || 'nil' }"
     shout = JSON.parse(params[:checkin])['shout']
     logger.info ("Shout is #{JSON.parse(params[:checkin])['shout']}")
     if current_user && (shout =~ /beer/i)
-      logger.info "Venue name is #{JSON.parse(params[:checkin])['venue']['name'] ? JSON.parse(params[:checkin])['venue']['name'] : 'nil'}"
+      logger.info "Venue name is #{JSON.parse(params[:checkin])['venue']['name'] || 'nil'}"
       venue = Venue.new(JSON.parse(params[:checkin])['venue']['name'], 1, browser)
-      venue.search_utappd
+      venue.search_untappd
       if venue.beers.count > 0
         venue.beers.each {|beer| logger.info "beers #{beer.name}" }
         
         new_beer_names = 'Try these: ' + venue.beers.select { |beer| !beer.had}.map { |new_beer| new_beer.name}.join(' ')
       else
-        new_beer_names = "This bar isn't on beermenus, bro :("
+        new_beer_names = "No beers found for this venue :("
       end
       
       url = 'https://api.foursquare.com/v2/checkins/' + 
