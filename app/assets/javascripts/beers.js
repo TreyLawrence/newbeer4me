@@ -10,7 +10,7 @@ var collapsible_left_timeout = '<div data-role="collapsible" data-content-theme=
 var collapsible_right_timeout = '</p></div>'
 
 $(function() {
-	$("#search").keypress(function(event) {
+	$("#search").live("keypress", function(event) {
 		if ( event.which == ENTER ) {
 			event.preventDefault();
 			var text = $('#search').val().trim();
@@ -40,7 +40,7 @@ $(function() {
 
 		ajax_send(name, id, type);
 	});
-    $('a[title="beer"]').click(function(){
+    $('a[title="beer"]').live("click", function(){
 		$(this).addClass("ui-btn-active");
 		$('a[title="venue"]').removeClass("ui-btn-active");
 		$('#search').attr("placeholder", "Beer...");
@@ -48,7 +48,7 @@ $(function() {
 		$('[data-role="collapsible-set"].beers').show();
 		search_type = 'beer';
 	});
-	$('a[title="venue"]').click(function(){
+	$('a[title="venue"]').live("click", function(){
 		$(this).addClass("ui-btn-active");
 		$('a[title="beer"]').removeClass("ui-btn-active");
 		$('#search').attr("placeholder", "Venue...");
@@ -56,7 +56,7 @@ $(function() {
 		$('[data-role="collapsible-set"].venues').show();
 		search_type = 'venue';
     });
-	$('a.foursquare').click(function(){
+	$('a.foursquare').live("click", function(){
 		$(this).replaceWith($(document.createElement("img")).attr("src","/assets/foursquare-busy.gif"));
 		window.location = "https://foursquare.com/oauth2/authenticate" +
                     "?client_id=DLTI5SNFPYNXCV4AKZYYPZWXOFWLS3B2ZBGOWEC1DB1NO3BJ" +
