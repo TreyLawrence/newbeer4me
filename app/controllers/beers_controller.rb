@@ -59,44 +59,48 @@ class BeersController < ApplicationController
   
   def checkin
     render nothing: true
-    current_user = User.find_by_foursquare_id(JSON.parse(params[:checkin])['user']['id'])
-    logger.info "Current user is #{current_user.untappd_username || 'nil' }"
-    logger.info "Password is #{current_user.password || 'nil'}"
-    logger.info "Signing in from inside checkin"
-    if sign_in_to_untappd
-      logger.info "Signed in"
+    
+    begin
+      current_user = User.find_by_foursquare_id(JSON.parse(params[:checkin])['user']['id'])
+      logger.info "Current user is #{current_user.untappd_username || 'nil' }"
+      logger.info "Password is #{current_user.password || 'nil'}"
+      logger.info "Signing in from inside checkin"
+    
       shout = JSON.parse(params[:checkin])['shout']
       logger.info ("Shout is #{JSON.parse(params[:checkin])['shout']}")
-      if current_user && (shout =~ /beer/i)
-        logger.info "Venue name is #{JSON.parse(params[:checkin])['venue']['name'] || 'nil'}"
-        venue = Venue.new(JSON.parse(params[:checkin])['venue']['name'], 1, browser)
-        venue.search_untappd
-        if venue.beers.count > 0
-          venue.beers.each {|beer| logger.info beer.name }
+    
+      logger.info "Venue name is #{JSON.parse(params[:checkin])['venue']['name'] || 'nil'}"
+      venue = Venue.new(JSON.parse(params[:checkin])['venue']['name'], 1, browser)
 
-          new_beer_names = 'Try these: ' + venue.new_beers.map { |beer| beer.name}.join(', ')
-        else
-          new_beer_names = "No beers found for this venue :("
-        end
+      if shout =~ /beer/i    
+        if current_user && sign_in_to_untappd
+          venue.search_untappd
+          if venue.beers.count > 0
+            venue.beers.each {|beer| logger.info beer.name }
 
-        url = 'https://api.foursquare.com/v2/checkins/' + 
-              "#{current_user.foursquare_id}/reply" + 
-              "?oauth_token=#{current_user.foursquare_token}" +
-              "&text=#{new_beer_names.gsub(' ', '%20')[0..160]}"
+            new_beer_names = 'Try these: ' + venue.new_beers.map { |beer| beer.name}.join(', ')
+          else
+            new_beer_names = "No beers found for this venue :("
+          end
 
-        logger.info "url: #{url}"
+          url = 'https://api.foursquare.com/v2/checkins/' + 
+                "#{current_user.foursquare_id}/reply" + 
+                "?oauth_token=#{current_user.foursquare_token}" +
+                "&text=#{new_beer_names.gsub(' ', '%20')[0..160]}"
 
-        begin
+          logger.info "url: #{url}"
+
           page = browser.post('https://api.foursquare.com/v2/checkins/' + 
                               "#{current_user.foursquare_id}/reply" + 
                               "?oauth_token=#{current_user.foursquare_token}" +
                               "&text=#{new_beer_names.gsub(' ', '%20')[0..160]}")
-        rescue Mechanize::Error => e
-          logger.info e
+        else
+          logger.info "Unsuccessful :("
         end
       end
-    else
-      logger.info "Unsuccessful :("
+    rescue Exception => e  
+      logger.info e.message  
+      logger.info e.backtrace.inspect  
     end
   end
   
