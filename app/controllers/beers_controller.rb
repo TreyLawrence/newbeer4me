@@ -70,7 +70,7 @@ class BeersController < ApplicationController
       if venue.beers.count > 0
         venue.beers.each {|beer| logger.info "beers #{beer.name}" }
         
-        new_beer_names = 'Try these: ' + venue.beers.select { |beer| !beer.had}.map { |new_beer| new_beer.name}.join(' ')
+        new_beer_names = 'Try these: ' + venue.new_beers.each { |beer| beer.name}.join(' ')
       else
         new_beer_names = "No beers found for this venue :("
       end
