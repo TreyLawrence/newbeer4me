@@ -2,6 +2,7 @@
 <h1>Settings</h1>
 <% if @foursquare %>
   <%= content_tag(:p, "Your Foursquare account is connected") %>
+  <a href="/disable" data-role="button">Disconnect</a>
 <% else %>
   <%= content_tag(:a, image_tag("foursquare-connect.png"), href: "#", class: "foursquare") %>
 <% end %>
