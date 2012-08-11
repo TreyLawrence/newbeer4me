@@ -107,6 +107,7 @@ class BeersController < ApplicationController
   def disable_foursquare
     current_user.foursquare_token = nil
     current_user.foursquare_id = nil
+    current_user.save
     render 'settings'
   end
 

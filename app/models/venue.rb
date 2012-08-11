@@ -4,12 +4,13 @@ class Venue
   attr_accessor :name, :result, :beers, :id, :spell_check, :search
   validates :name, presence: true
   
-  def initialize venue_search, venue_id, mechanize_object
+  def initialize venue_search, venue_id, mechanize_object, logger
     @browser = mechanize_object
     @search = venue_search
     @id = venue_id
     @result = {name: "Searched for #{@search}"}
     @beers = []
+    @debug = logger
   end
   
   def spell_check
