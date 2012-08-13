@@ -7,6 +7,7 @@ gem 'thin', '1.4.1'
 gem 'pry-rails'
 gem 'aes', '0.5.0'
 gem 'delayed_job_active_record', '0.3.2'
+gem 'pry-remote'
 
 group :production do
   gem 'pg', '0.12.2'
