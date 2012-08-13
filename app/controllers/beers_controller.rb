@@ -61,10 +61,10 @@ class BeersController < ApplicationController
     shout = JSON.parse(params[:checkin])['shout']
 
     if shout =~ /beer/i
-      foursquare_id = JSON.parse(params[:checkin])['user']['id'])
+      foursquare_id = JSON.parse(params[:checkin])['user']['id']
       current_user = User.find_by_foursquare_id(foursquare_id)
-      venue_name = JSON.parse(params[:checkin])['venue']['name'])
-      checkin_id = JSON.parse(params[:checkin])['id'])
+      venue_name = JSON.parse(params[:checkin])['venue']['name']
+      checkin_id = JSON.parse(params[:checkin])['id']
 
       if current_user
         current_user.process_foursquare_checkin(venue_name, checkin_id)
