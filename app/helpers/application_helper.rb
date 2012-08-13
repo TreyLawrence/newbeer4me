@@ -65,8 +65,4 @@ module ApplicationHelper
     self.current_user = nil
     session.delete(:name)
   end
-  
-  # def store_location
-  #   session[:return_to] = request.fullpath
-  # end
 end
