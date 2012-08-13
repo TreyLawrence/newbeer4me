@@ -68,11 +68,11 @@ $(function() {
 
 function ajax_send(text, id_num, search_type){
 	if(search_type == "beer") {
-		var timeout_time = 15000; //15 seconds for beers
+		var timeout_time = 30000; //30 seconds for beers
 	} else {
 		var timeout_time = 60000; //60 seconds for venues
 	}
-	
+
 	$.ajaxSetup({
 		beforeSend: function(xhr) {
 			xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
