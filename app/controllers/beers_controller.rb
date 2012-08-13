@@ -26,7 +26,7 @@ class BeersController < ApplicationController
   end
 
   def settings
-    @foursquare = current_user.foursquare_token
+    @foursquare = current_user.foursquare_token && current_user.foursquare_id
     if params[:error]
       current_user.foursquare_token = nil
       current_user.foursquare_id = nil
@@ -58,61 +58,31 @@ class BeersController < ApplicationController
   end
   
   def checkin
-    render nothing: true
-    
-    begin
-      current_user = User.find_by_foursquare_id(JSON.parse(params[:checkin])['user']['id'])
-      logger.info "Current user is #{current_user.untappd_username || 'nil' }"
-      logger.info "Password is #{current_user.password || 'nil'}"
-      logger.info "Signing in from inside checkin"
-    
-      shout = JSON.parse(params[:checkin])['shout']
-      logger.info ("Shout is #{JSON.parse(params[:checkin])['shout']}")
-    
-      logger.info "Venue name is #{JSON.parse(params[:checkin])['venue']['name'] || 'nil'}"
-      venue = Venue.new(JSON.parse(params[:checkin])['venue']['name'], 1, browser, logger)
+    shout = JSON.parse(params[:checkin])['shout']
 
-      if shout =~ /beer/i    
-        if current_user && sign_in_to_untappd
-          venue.search_untappd
-          if venue.beers.count > 0
-            venue.beers.each {|beer| logger.info beer.name }
+    if shout =~ /beer/i
+      foursquare_id = JSON.parse(params[:checkin])['user']['id'])
+      current_user = User.find_by_foursquare_id(foursquare_id)
+      venue_name = JSON.parse(params[:checkin])['venue']['name'])
+      checkin_id = JSON.parse(params[:checkin])['id'])
 
-            new_beer_names = 'Try these: ' + venue.new_beers.map { |beer| beer.name}.join(', ')
-          else
-            new_beer_names = "No beers found for this venue :("
-          end
-
-          url = 'https://api.foursquare.com/v2/checkins/' + 
-                "#{current_user.foursquare_id}/reply" + 
-                "?oauth_token=#{current_user.foursquare_token}" +
-                "&text=#{new_beer_names.gsub(' ', '%20')[0..160]}"
-
-          logger.info "url: #{url}"
-
-          page = browser.post('https://api.foursquare.com/v2/checkins/' + 
-                              "#{current_user.foursquare_id}/reply" + 
-                              "?oauth_token=#{current_user.foursquare_token}" +
-                              "&text=#{new_beer_names.gsub(' ', '%20')[0..160]}")
-        else
-          logger.info "Unsuccessful :("
-        end
+      if current_user
+        current_user.process_foursquare_checkin(venue_name, checkin_id)
       end
-    rescue Exception => e  
-      logger.info e.message  
-      logger.info e.backtrace.inspect  
     end
+    
+    render nothing: true
   end
   
   def disable_foursquare
     current_user.foursquare_token = nil
     current_user.foursquare_id = nil
     current_user.save
-    render 'settings'
+    redirect_to 'settings'
   end
 
   private
-    
+
     def client_secret
       ENV['FS_CLIENT_SECRET']
     end

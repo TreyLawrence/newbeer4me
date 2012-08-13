@@ -13,4 +13,39 @@ class User < ActiveRecord::Base
       self.password_digest = AES.encrypt(new_password, ENV['UNTAPPD_KEY'])
     end
   end
+
+  def process_foursquare_checkin(venue, checkin_id)
+    browser = Mechanize.new
+
+    page = browser.post('http://untappd.com/login', {
+      "username" => self.untappd_username,
+      "password" => self.password
+    })
+
+    username_link = page.links.select { |link| link.to_s =~ /Profile/ rescue nil }
+    if username_link
+      venue = Venue.new(venue, nil, browser, logger)
+
+      venue.search_untappd
+      if venue.beers.count > 0
+        venue.beers.each {|beer| p beer.name }
+        new_beer_names = 'Try these: ' + venue.new_beers.map { |beer| beer.name}.join(', ')
+      else
+        new_beer_names = "No beers found for this venue :("
+      end
+      p new_beer_names
+      url = 'https://api.foursquare.com/v2/checkins/' +
+            "#{checkin_id}/reply" +
+            "?oauth_token=#{self.foursquare_token}" +
+            "&text=#{new_beer_names.gsub(' ', '%20')[0..160]}"
+
+      logger.info "url: #{url}"
+
+      page = browser.post('https://api.foursquare.com/v2/checkins/' +
+                          "#{checkin_id}/reply" +
+                          "?oauth_token=#{self.foursquare_token}" +
+                          "&text=#{new_beer_names.gsub(' ', '%20')[0..160]}")
+    end
+  end
+  handle_asynchronously :process_foursquare_checkin
 end
