@@ -7,7 +7,7 @@ class BeersController < ApplicationController
   def search
     if params[:search]
       if params[:type] == "beer"
-        beer = Beer.new(params[:search].strip, params[:id], browser)
+        beer = Beer.new(params[:search].strip, "beer"+params[:id].to_s, browser)
         beer.spell_check
         if beer.search_untappd
           render text: {result: render_to_string(beer), id: params[:id], type: params[:type]}.to_json
@@ -15,7 +15,7 @@ class BeersController < ApplicationController
           render text: {result: "Error logging in", id: params[:id], type: params[:type]}.to_json
         end
       elsif params[:type] == "venue"
-        venue = Venue.new(params[:search].strip, params[:id], browser, logger)
+        venue = Venue.new(params[:search].strip, "venue"+params[:id], browser)
         venue.spell_check
         venue.search_untappd
         render text: {result: render_to_string(venue), id: params[:id], type: params[:type]}.to_json

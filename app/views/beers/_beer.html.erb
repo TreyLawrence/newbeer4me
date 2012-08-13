@@ -1,4 +1,4 @@
-<div data-role="collapsible" data-content-theme="c" class=<%= "beer#{beer.id if beer.id}"%> >
+<div data-role="collapsible" data-content-theme="c" class="<%= beer.id%>" >
   <% if beer.brewery.nil? || beer.name.nil? %>
     <%= content_tag(:h3, "No search results") %>
   <% else %>

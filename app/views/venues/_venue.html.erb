@@ -1,4 +1,4 @@
-<div data-role="collapsible" data-content-theme="c" class="venue<%= venue.id %>">
+<div data-role="collapsible" data-content-theme="c" class="<%= venue.id %>">
   <% if venue.name.nil? %>
     <%= content_tag(:h3, "No search results") %>
   <% else %>
@@ -10,12 +10,12 @@
   <%= content_tag(:p, "Spell checked to #{venue.spell_check}") if venue.spell_check %>
 
   <%= content_tag(:p, "New Beers(#{venue.new_beers.count}):" ) if venue.new_beers %>
-  <div data-role="collapsible-set" class="venue<%= venue.id %>_beers_nothad">
+  <div data-role="collapsible-set" class="<%= venue.id %>_beers_nothad">
     <%= render venue.new_beers if venue.new_beers %>
   </div>
 
   <%= content_tag(:p, "Old Beers(#{venue.new_beers.count}):" ) %>
-  <div data-role="collapsible-set" class="venue<%= venue.id %>_beers_had">
+  <div data-role="collapsible-set" class="<%= venue.id %>_beers_had">
     <%= render venue.old_beers if venue.old_beers %>
   </div>
 </div>

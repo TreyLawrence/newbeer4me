@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
 
     username_link = page.links.select { |link| link.to_s =~ /Profile/ rescue nil }
     if username_link
-      venue = Venue.new(venue, nil, browser, logger)
+      venue = Venue.new(venue, 'foursquare_venue', browser)
 
       venue.search_untappd
       if venue.beers.count > 0

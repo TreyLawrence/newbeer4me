@@ -4,13 +4,12 @@ class Venue
   attr_accessor :name, :result, :beers, :id, :spell_check, :search
   validates :name, presence: true
   
-  def initialize venue_search, venue_id, mechanize_object, logger
+  def initialize venue_search, venue_id, mechanize_object
     @browser = mechanize_object
     @search = venue_search
     @id = venue_id
     @result = {name: "Searched for #{@search}"}
     @beers = []
-    @debug = logger
   end
   
   def spell_check
@@ -61,7 +60,7 @@ class Venue
         if @beers.select {|beer| beer.name == checkin.css('a')[1].text}.empty?
           beer_num += 1
           beer_checked_into = Mechanize::Page::Link.new(checkin.css('a')[1], @browser, venue_page).click
-          new_beer = Beer.new(beer_checked_into, beer_num, @browser)
+          new_beer = Beer.new(beer_checked_into, @id + "_beer" + beer_num.to_s, @browser)
           new_beer.search_untappd
           @beers << new_beer
         end
