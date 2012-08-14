@@ -1,14 +1,12 @@
 class Venue
   include ActiveModel::Validations
-  include ApplicationHelper
-  attr_accessor :name, :result, :beers, :id, :spell_check, :search
+  attr_accessor :name, :beers, :id, :spell_check, :search, :address
   validates :name, presence: true
   
   def initialize venue_search, venue_id, mechanize_object
     @browser = mechanize_object
     @search = venue_search
     @id = venue_id
-    @result = {name: "Searched for #{@search}"}
     @beers = []
   end
   
@@ -49,13 +47,11 @@ class Venue
   def search_untappd
     query = @spell_check || @search
     page = @browser.get("http://untappd.com/search?q=#{query}&type=venues")
-    if (page.body =~ /No results/)
-      @result.merge!({untappd: "Venue is not on untappd.com :("})
-    else
+    unless (page.body =~ /No results/)
       beer_num = 0
       venue_page = page.links.select {|link| link.uri.to_s =~ /venue\/.+/}.first.click
       @name = venue_page.search('div.info-box').css('h2').text
-      @result.merge!({untappd: "#{@name}"})
+      @address = venue_page.search('div.info-box').css('p')[0].text
       venue_page.search("p.checkin").map do |checkin|
         if @beers.select {|beer| beer.name == checkin.css('a')[1].text}.empty?
           beer_num += 1

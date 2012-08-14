@@ -8,6 +8,8 @@
   <%= content_tag(:p, "Searched for #{venue.search}") if venue.search %>
 
   <%= content_tag(:p, "Spell checked to #{venue.spell_check}") if venue.spell_check %>
+  
+  <%= content_tag(:p, "Address: #{venue.address}" if venue.address)%>
 
   <%= content_tag(:p, "New Beers(#{venue.new_beers.count}):" ) if venue.new_beers %>
   <div data-role="collapsible-set" class="<%= venue.id %>_beers_nothad">
