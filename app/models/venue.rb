@@ -28,21 +28,23 @@ class Venue
     @old_beers ||= @beers.select { |beer| beer.had } if @beers
   end
   
-  # def search_beer_menus
-  #   query = @spell_check || @search
-  #   page = @browser.get("http://www.beermenus.com/search?q=#{@name}")
-  #   venue_links = page.links.select {|link| link.uri.to_s =~ /places\/\d+/}
-  #   if (page.body =~ /Oops/) || (venue_links.empty?)
-  #     @result.merge!({beer_menus: "Venue is not on beermenus.com :("})
-  #   else
-  #     venue_page = venue_links.first.click
-  #     @result.merge!({beer_menus: "#{venue_page.title.gsub('Beer Menu - ', '')}"})
-  #     @beers = venue_page.links.select { |link| link.uri.to_s =~ /beers\/.+/}.map do |beer_link|
-  #       Beer.new(beer_link.to_s, nil, @browser)
-  #     end
-  #     @beers.each { |beer| beer.search_untappd }
-  #   end
-  # end
+  def search_beer_menus
+    query = @spell_check || @search
+    page = @browser.get("http://www.beermenus.com/search?q=#{query}")
+    venue_links = page.links.select {|link| link.uri.to_s =~ /places\/\d+/}
+    unless (page.body =~ /Oops/) || (venue_links.empty?)
+      venue_page = venue_links.first.click
+      date_string = venue_page.search('p.left').text.gsub('Updated: ','')
+      if Time.now - 7.days < Time.strptime(date_string, "%m/%d/%Y")
+        venue_page.links.select { |link| link.uri.to_s =~ /beers\/.+/}.each do |beer_link|
+          if @beers.select {|beer| beer.name == beer_link.to_s}.empty?
+            @beers << Beer.new(beer_link.to_s, nil, @browser)
+          end
+        end
+        @beers.each { |beer| beer.search_untappd }
+      end
+    end
+  end
   
   def search_untappd
     query = @spell_check || @search
