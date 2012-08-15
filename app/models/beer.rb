@@ -37,7 +37,7 @@ class Beer
       beer_page = beer_links.first.click unless beer_links.empty?
     end
     
-    if beer_page.links.select { |link| link.uri.to_s[/login/] rescue nil}.empty?
+    if beer_page && beer_page.links.select { |link| link.uri.to_s[/login/] rescue nil}.empty?
       @brewery = beer_page.search("ul.beer-details").css('a').text
       @name = beer_page.search("ul.beer-details").css('h2').text
       @had = !beer_page.search('.drank.tip').empty?
