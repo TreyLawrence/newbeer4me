@@ -41,7 +41,7 @@ class Beer
       @brewery = beer_page.search("ul.beer-details").css('a').text
       @name = beer_page.search("ul.beer-details").css('h2').text
       @had = !beer_page.search('.drank.tip').empty?
-      @avg_rating = beer_page.search('ul.rating-display').css('span')[1].text.strip
+      #@avg_rating = beer_page.search('ul.rating-display').css('span')[1].text.strip
       true
     else
       false
