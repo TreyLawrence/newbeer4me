@@ -8,7 +8,7 @@ module ApplicationHelper
 
     #Verify that the sign in was successful
     username_link = page.links.select { |link| link.to_s =~ /Profile/ rescue nil }
-    if username_link.nil?
+    if username_link.empty?
       logger.info "Unsuccessful login, signing out"
       sign_out
       false
