@@ -3,7 +3,7 @@ class BeersController < ApplicationController
   
   def index
   end
-  
+
   def search
     if params[:search]
       if params[:type] == "beer"
@@ -58,7 +58,7 @@ class BeersController < ApplicationController
   end
   
   def checkin
-    shout = JSON.parse(params[:checkin])['shout']
+    shout = JSON.parse(params[:checkin])['shout'] rescue nil
 
     if shout =~ /beer/i
       foursquare_id = JSON.parse(params[:checkin])['user']['id']
