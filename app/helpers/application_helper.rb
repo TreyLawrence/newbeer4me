@@ -1,7 +1,7 @@
 module ApplicationHelper
   def sign_in_to_untappd
     logger.info "Attempting to sign into untappd"
-    page = browser.post('http://untappd.com/login', {
+    page = browser.post('https://untappd.com/login', {
       "username" => current_user.untappd_username,
       "password" => current_user.password
     })
@@ -28,7 +28,7 @@ module ApplicationHelper
       logger.info "Current user has no password"
       false
     else
-      page = browser.get('http://untappd.com/')
+      page = browser.get('https://untappd.com/')
       if page.link_with(:text => /Profile/).nil?
         sign_in_to_untappd  
       end
