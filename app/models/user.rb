@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
   def process_foursquare_checkin(venue, checkin_id)
     browser = Mechanize.new
 
-    page = browser.post('http://untappd.com/login', {
+    page = browser.post('https://untappd.com/login', {
       "username" => self.untappd_username,
       "password" => self.password
     })
@@ -33,13 +33,8 @@ class User < ActiveRecord::Base
       else
         new_beer_names = "No beers found for this venue :("
       end
-      p new_beer_names
-      url = 'https://api.foursquare.com/v2/checkins/' +
-            "#{checkin_id}/reply" +
-            "?oauth_token=#{self.foursquare_token}" +
-            "&text=#{new_beer_names.gsub(' ', '%20')[0..160]}"
 
-      logger.info "url: #{url}"
+      p new_beer_names
 
       page = browser.post('https://api.foursquare.com/v2/checkins/' +
                           "#{checkin_id}/reply" +

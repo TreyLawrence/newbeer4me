@@ -32,7 +32,7 @@ class Beer
       beer_page = @beer_page
     else
       query = @spell_check || @search
-      query_page = @browser.get("http://untappd.com/search?q=#{query}")
+      query_page = @browser.get("https://untappd.com/search?q=#{query}")
       beer_links = query_page.links.select { |link| link.uri.to_s[/beer\/\d+/] rescue nil }
       beer_page = beer_links.first.click unless beer_links.empty?
     end

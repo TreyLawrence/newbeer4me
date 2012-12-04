@@ -48,7 +48,7 @@ class Venue
   
   def search_untappd
     query = @spell_check || @search
-    page = @browser.get("http://untappd.com/search?q=#{query}&type=venues")
+    page = @browser.get("https://untappd.com/search?q=#{query}&type=venues")
     unless (page.body =~ /No results/)
       beer_num = 0
       venue_page = page.links.select {|link| link.uri.to_s =~ /venue\/.+/}.first.click
