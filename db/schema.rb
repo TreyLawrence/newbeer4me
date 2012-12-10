@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120813042914) do
+ActiveRecord::Schema.define(:version => 20121210064519) do
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -44,6 +44,9 @@ ActiveRecord::Schema.define(:version => 20120813042914) do
     t.timestamp "created_at",       :null => false
     t.timestamp "updated_at",       :null => false
     t.string    "password_digest"
+    t.string    "untappd_token"
+    t.string    "email"
+    t.string    "name"
   end
 
 end

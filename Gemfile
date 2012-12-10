@@ -8,6 +8,7 @@ gem 'pry-rails'
 gem 'aes', '0.5.0'
 gem 'delayed_job_active_record', '0.3.2'
 gem 'pry-remote'
+gem 'bcrypt-ruby'
 
 group :production do
   gem 'pg', '0.12.2'

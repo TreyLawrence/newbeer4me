@@ -30,6 +30,7 @@ GEM
       multi_json (~> 1.0)
     aes (0.5.0)
     arel (3.0.2)
+    bcrypt-ruby (3.0.1)
     better_errors (0.0.7)
       coderay
       erubis
@@ -151,6 +152,7 @@ PLATFORMS
 
 DEPENDENCIES
   aes (= 0.5.0)
+  bcrypt-ruby
   better_errors
   binding_of_caller
   coffee-rails (~> 3.2.1)
