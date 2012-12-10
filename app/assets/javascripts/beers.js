@@ -61,7 +61,7 @@ $(function() {
 		window.location = "https://foursquare.com/oauth2/authenticate" +
                     "?client_id=DLTI5SNFPYNXCV4AKZYYPZWXOFWLS3B2ZBGOWEC1DB1NO3BJ" +
                     "&response_type=code" +
-                    "&redirect_uri=https://newbeer4me.herokuapp.com/settings"
+                    "&redirect_uri=https://newbeer4me.herokuapp.com/enable"
 	});
 });
 

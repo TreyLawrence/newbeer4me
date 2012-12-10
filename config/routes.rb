@@ -3,6 +3,7 @@ Newbeer4me::Application.routes.draw do
   match '/settings', to: 'beers#settings', :as => "settings"
   match '/signin', to: 'sessions#new'
   match '/logout', to: 'sessions#destroy'
+  match '/enable', to: 'beers#enable_foursquare'
   match '/disable', to: 'beers#disable_foursquare'
   match '/checkin', to: 'beers#checkin'
 

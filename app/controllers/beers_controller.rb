@@ -27,36 +27,8 @@ class BeersController < ApplicationController
 
   def settings
     @foursquare = current_user.foursquare_token && current_user.foursquare_id
-    if params[:error]
-      current_user.foursquare_token = nil
-      current_user.foursquare_id = nil
-      current_user.save
-    elsif params[:code]
-      begin
-        page = browser.get('https://foursquare.com/oauth2/access_token' + 
-                          "?client_id=#{client_id}" + 
-                          "&client_secret=#{client_secret}" + 
-                          "&grant_type=authorization_code" + 
-                          '&redirect_uri=https://newbeer4me.herokuapp.com/settings' + 
-                          "&code=#{params['code']}")
-
-        current_user.foursquare_token = JSON.parse(page.body)['access_token']
-
-        page = browser.get('https://api.foursquare.com/v2/users/self' + 
-                          "?oauth_token=#{current_user.foursquare_token}")
-
-        current_user.foursquare_id = JSON.parse(page.body)["response"]["user"]["id"]
-
-        if current_user.foursquare_id && current_user.foursquare_token
-          current_user.save
-        end
-        redirect_to settings_path
-      rescue Mechanize::Error => e
-        logger.info e
-      end
-    end
   end
-  
+
   def checkin
     shout = JSON.parse(params[:checkin])['shout'] rescue nil
 
@@ -73,12 +45,43 @@ class BeersController < ApplicationController
     
     render nothing: true
   end
-  
+
   def disable_foursquare
     current_user.foursquare_token = nil
     current_user.foursquare_id = nil
     current_user.save
-    redirect_to 'settings'
+    redirect_to settings_path
+  end
+
+  def enable_foursquare
+    if params[:error]
+      current_user.foursquare_token = nil
+      current_user.foursquare_id = nil
+      current_user.save
+    elsif params[:code]
+      begin
+        page = browser.get('https://foursquare.com/oauth2/access_token' + 
+                          "?client_id=#{client_id}" + 
+                          "&client_secret=#{client_secret}" + 
+                          "&grant_type=authorization_code" + 
+                          '&redirect_uri=https://newbeer4me.herokuapp.com/enable' + 
+                          "&code=#{params['code']}")
+
+        current_user.foursquare_token = JSON.parse(page.body)['access_token']
+
+        page = browser.get('https://api.foursquare.com/v2/users/self' + 
+                          "?oauth_token=#{current_user.foursquare_token}")
+
+        current_user.foursquare_id = JSON.parse(page.body)["response"]["user"]["id"]
+
+        if current_user.foursquare_id && current_user.foursquare_token
+          current_user.save
+        end
+      rescue Mechanize::Error => e
+        logger.info e
+      end
+    end
+    redirect_to settings_path
   end
 
   private
