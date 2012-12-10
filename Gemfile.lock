@@ -30,6 +30,10 @@ GEM
       multi_json (~> 1.0)
     aes (0.5.0)
     arel (3.0.2)
+    better_errors (0.0.7)
+      coderay
+      erubis
+    binding_of_caller (0.6.8)
     builder (3.0.0)
     coderay (1.0.7)
     coffee-rails (3.2.2)
@@ -147,6 +151,8 @@ PLATFORMS
 
 DEPENDENCIES
   aes (= 0.5.0)
+  better_errors
+  binding_of_caller
   coffee-rails (~> 3.2.1)
   delayed_job_active_record (= 0.3.2)
   jquery-rails

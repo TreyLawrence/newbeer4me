@@ -15,6 +15,8 @@ end
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'
+  gem 'binding_of_caller'
+  gem 'better_errors'
 end
 
 # Gems used only for assets and not required
