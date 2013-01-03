@@ -57,7 +57,7 @@ $(function() {
 		search_type = 'venue';
     });
 	$('a.foursquare').live("click", function(){
-		$(this).replaceWith($(document.createElement("img")).attr("src","/assets/foursquare-busy.gif"));
+		$(this).replaceWith($(document.createElement("img")).attr("src","/assets/busy-bar.gif"));
 		window.location = "https://foursquare.com/oauth2/authenticate" +
                     "?client_id=DLTI5SNFPYNXCV4AKZYYPZWXOFWLS3B2ZBGOWEC1DB1NO3BJ" +
                     "&response_type=code" +
