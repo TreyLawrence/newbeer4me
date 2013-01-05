@@ -1,7 +1,10 @@
 Newbeer4me::Application.routes.draw do
+  resources :users
+  
   post '/search',  to: 'beers#search'
   match '/settings', to: 'beers#settings', :as => "settings"
   match '/signin', to: 'sessions#new'
+  match '/signup', to: 'users#new'
   match '/logout', to: 'sessions#destroy'
   match '/enable', to: 'beers#enable_foursquare'
   match '/disable', to: 'beers#disable_foursquare'
