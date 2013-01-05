@@ -4,5 +4,6 @@ class AddUntappdApiTokenToUser < ActiveRecord::Migration
     add_column :users, :email, :string
     add_column :users, :name, :string
     add_column :users, :remember_token, :string
+    remove_column :users, :untappd_username
   end
 end

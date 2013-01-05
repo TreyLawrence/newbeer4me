@@ -37,7 +37,6 @@ ActiveRecord::Schema.define(:version => 20121210064519) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "untappd_username"
     t.datetime "last_seen_at"
     t.string   "foursquare_token"
     t.string   "foursquare_id"
