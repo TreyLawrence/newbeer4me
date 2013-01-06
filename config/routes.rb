@@ -1,19 +1,21 @@
 Newbeer4me::Application.routes.draw do
-  resources :users
-  
   post '/search',  to: 'beers#search'
-  match '/settings', to: 'beers#settings', :as => "settings"
+  match '/settings', to: 'users#settings', :as => "settings"
   match '/signin', to: 'sessions#new'
   match '/signup', to: 'users#new'
   match '/logout', to: 'sessions#destroy'
-  match '/enable', to: 'beers#enable_foursquare'
-  match '/disable', to: 'beers#disable_foursquare'
   match '/checkin', to: 'beers#checkin'
 
+  match '/connect/foursquare', to: 'users#connect_foursquare'
+  match '/connect/untappd', to: 'users#connect_untappd'
+  match '/disconnect/foursquare', to: 'users#disconnect_foursquare'
+  match '/disconnect/untappd', to: 'users#disconnect_untappd'
+
+  resources :users, only: [:new, :create, :destroy]
   resources :sessions, only: [:new, :create, :destroy]
-  
+
   root :to => 'beers#index'
-  
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
