@@ -1,20 +1,10 @@
 <% provide(:title, "Sign In") %>
-<h1>Sign in</h1>
+<h1>New Beer 4 Me</h1>
 
-<% flash.each do |key, value| %>
-  <%= content_tag(:div, value, class: "alert alert-#{key}") %>
-<% end %>
-
-<%= form_for :untappd_info, url: sessions_path do |f| %>
-  
-  <%= f.label :username %>
-  <%= f.text_field :username %>
-
-  <%= f.label :password %>
-  <%= f.password_field :password %>
-
-  <%= f.submit "Sign in" %>
-  
-<% end %>
-
-<p><%= link_to "Not an Untappd user?", "http://untappd.com/create" %></p>
+<div align="center">
+  <a href="#" class='untappd' data-role="button">Sign in with Untappd</a>
+  <div><b>OR</b></div>
+  <a href="/signup" class="signUp" data-role="button">Sign up with email</a>
+  <div><b>OR</b></div>
+  <a href="#" class="logIn" data-role="button">Log in</a>
+</div>
