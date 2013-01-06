@@ -14,4 +14,4 @@
 //= require jquery_ujs
 //= require_tree .
 
-var busyBar = $(document.createElement("img")).attr("src","/assets/busy-bar.gif");
+var busyBar = $('<img/>', {src: '/assets/busy-bar.gif'});
