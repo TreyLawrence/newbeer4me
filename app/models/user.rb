@@ -15,17 +15,6 @@ class User < ActiveRecord::Base
   
   before_save { self.email.downcase! }
   before_save :create_remember_token
-  
-  def password
-    @password ||= AES.decrypt(password_digest, ENV['UNTAPPD_KEY']) if password_digest
-  end
-  
-  def password=(new_password)
-    if new_password
-      @password = new_password
-      self.password_digest = AES.encrypt(new_password, ENV['UNTAPPD_KEY'])
-    end
-  end
 
   def process_foursquare_checkin(venue, checkin_id)
     browser = Mechanize.new
