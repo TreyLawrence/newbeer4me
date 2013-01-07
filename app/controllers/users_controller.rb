@@ -20,6 +20,7 @@ class UsersController < ApplicationController
   end
 
   def connect_untappd
+    logger.info params[:code]
     if params[:code]
       begin
         oauth_json = JSON.parse(browser.get("http://untappd.com/oauth/authorize/" +
@@ -28,22 +29,21 @@ class UsersController < ApplicationController
                           "&response_type=code" +
                           "&redirect_url=https://newbeer4me.herokuapp.com/connect/untappd" +
                           "&code=#{params[:code]}").body)
-                          
-        logger.info oauth_json
-        
+
+        logger.info "oauth_json #{oauth_json}"
         current_user = User.new if !signed_in?
         current_user.untappd_token = oauth_json['response']['access_token']
-        
-        logger.info "access_token #{oauth_json['response']['access_token']}"
-        logger.info "current_user #{current_user}"
-        
+
+        logger.info "current_user.untappd_token #{current_user.untappd_token}"
         user_json = JSON.parse(browser.get("http://api.untappd.com/v4/user/info" +
                           "?access_token=#{current_user.untappd_token}").body)
-        
-        current_user.first_name |= user_json["response"]["user"]["first_name"]
-        current_user.last_name |= user_json["response"]["user"]["last_name"]
-        
-        current_user.save if current_user.untappd_token
+
+        logger.info "user_json #{user_json}"
+        current_user.first_name ||= user_json["response"]["user"]["first_name"]
+        logger.info "current_user.first_name #{current_user.first_name}"
+        current_user.last_name ||= user_json["response"]["user"]["last_name"]
+        logger.info current_user.last_name
+        current_user.save
       rescue Mechanize::Error => e
         logger.info e
       end
