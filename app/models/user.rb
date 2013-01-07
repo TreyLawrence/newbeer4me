@@ -1,11 +1,11 @@
 class User < ActiveRecord::Base
   has_secure_password
-  attr_accessible :name, :email, :password, :password_confirmation
+  attr_accessible :first_name, :last_name, :email, :password, :password_confirmation
   attr_accessible :foursquare_token, :last_seen_at, :untappd_token, :foursquare_id
-  validates :untappd_username, presence: true, uniqueness: { case_sensitive: false }
+
   validates :password_digest, presence: true
-  
-  validates :name, presence: true, length: { maximum: 50 }
+  validates :first_name, presence: true, length: { maximum: 50 }
+  validates :last_name, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence:   true,
                     format:     { with: VALID_EMAIL_REGEX },
