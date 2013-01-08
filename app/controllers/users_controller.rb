@@ -20,7 +20,7 @@ class UsersController < ApplicationController
   end
 
   def connect_untappd
-    logger.info params[:code]
+    logger.info "params[:code] #{params[:code]}"
     if params[:code]
       begin
         oauth_json = JSON.parse(browser.get("http://untappd.com/oauth/authorize/" +
@@ -42,7 +42,7 @@ class UsersController < ApplicationController
         current_user.first_name ||= user_json["response"]["user"]["first_name"]
         logger.info "current_user.first_name #{current_user.first_name}"
         current_user.last_name ||= user_json["response"]["user"]["last_name"]
-        logger.info current_user.last_name
+        logger.info "current_user.last_name #{current_user.last_name}"
         current_user.save
       rescue Mechanize::Error => e
         logger.info e
