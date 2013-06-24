@@ -9,6 +9,8 @@ gem 'aes', '0.5.0'
 gem 'delayed_job_active_record', '0.3.2'
 gem 'pry-remote'
 gem 'bcrypt-ruby'
+gem 'omniauth-untappd', github: 'strangnet/omniauth-untappd'
+gem 'omniauth-foursquare', github: 'arunagw/omniauth-foursquare'
 
 group :production do
   gem 'pg', '0.12.2'
