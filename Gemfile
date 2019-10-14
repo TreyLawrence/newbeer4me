@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.6'
+gem 'rails', '3.2.17'
 gem 'nokogiri', '1.5.6'
 gem 'mechanize', '2.5.1'
 gem 'thin', '1.4.1'
