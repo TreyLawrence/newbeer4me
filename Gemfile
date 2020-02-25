@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.6'
-gem 'nokogiri', '1.5.6'
+gem 'nokogiri', '1.10.8'
 gem 'mechanize', '2.5.1'
 gem 'thin', '1.4.1'
 gem 'pry-rails'
